@@ -9,6 +9,8 @@ class Result extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function user_progress()
     {
         return $this->belongsTo(UserProgress::class);
