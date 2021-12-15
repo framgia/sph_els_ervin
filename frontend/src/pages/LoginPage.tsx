@@ -1,20 +1,9 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-// enum GenderEnum {
-//   female = 'female',
-//   male = 'male',
-//   other = 'other',
-// }
-
-// interface IFormInput {
-//   firstName: String;
-//   gender: GenderEnum;
-// }
-
 interface IFormInput {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 }
 
 export default function LoginPage() {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -34,7 +35,7 @@ class QuestionController extends Controller
      * @param  \App\Http\Requests\StoreQuestionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreQuestionRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -68,7 +69,7 @@ class QuestionController extends Controller
      * @param  \App\Models\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateQuestionRequest $request, Question $question)
+    public function update(Request $request, Question $question)
     {
         //
     }
