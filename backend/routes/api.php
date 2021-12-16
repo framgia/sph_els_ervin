@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\QuestionController;
@@ -21,13 +22,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::resource('follows', FollowController::class);
-Route::resource('questions', QuestionController::class);
-Route::resource('categories', CategoryController::class);
 Route::resource('results', ResultController::class);
 Route::resource('progress', UserProgressController::class);
 Route::resource('users', UserController::class);
+Route::post('register', [AuthController::class, 'register']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::resource('questions', QuestionController::class);
+    Route::resource('categories', CategoryController::class);
 });

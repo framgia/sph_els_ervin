@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,9 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('avatar')->nullable();
-            $table->tinyInteger('is_admin');
             $table->string('password');
+            $table->string('avatar')->default('default.png');
+            $table->tinyInteger('is_admin')->default(User::REGULAR_USER);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
