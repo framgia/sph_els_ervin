@@ -3,11 +3,10 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface IFormInput {
   email: string;
-  name: string;
   password: string;
 }
 
-export default function RegistrationPage() {
+export default function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
   const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
 
@@ -17,14 +16,12 @@ export default function RegistrationPage() {
         <form onSubmit={handleSubmit(onSubmit)} className='form-control'>
           <label className='label'>Email</label>
           <input className='input' {...register('email')} />
-          <label className='label'>Name</label>
-          <input className='input' {...register('name')} />
           <label className='label'>Password</label>
           <input type='password' className='input' {...register('password')} />
           <input
             className='btn btn-info mt-5 w-1/2 mx-auto'
             type='submit'
-            value='Register'
+            value='Login'
           />
         </form>
       </div>
