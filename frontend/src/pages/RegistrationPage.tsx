@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { registerUser, RegistrationData } from '../actions/user';
+import { RegistrationData } from '../actions/types';
+import { registerUser } from '../actions/user';
 import { useDispatch } from 'react-redux';
 
 export default function RegistrationPage() {

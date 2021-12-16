@@ -1,14 +1,15 @@
 import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-
-interface IFormInput {
-  email: string;
-  password: string;
-}
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { LoginData } from '../actions/types';
+import { loginUser } from '../actions/user';
 
 export default function LoginPage() {
-  const { register, handleSubmit } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const { register, handleSubmit } = useForm<LoginData>();
+  const dispatch = useDispatch();
+  const onSubmit = (data: LoginData) => {
+    dispatch(loginUser(data));
+  };
 
   return (
     <div className='container mx-auto w-1/4 mt-5'>

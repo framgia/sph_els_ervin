@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import '../index.css';
-interface Props {}
-interface State {}
+import { connect } from 'react-redux';
 
-class Navbar extends Component<Props, State> {
-  state = {};
+interface Props {
+  currentUserToken: string;
+}
+
+class _Navbar extends Component<Props> {
+  getLoginState() {
+    return (
+      <p className='mr-2'>{this.props.currentUserToken ? 'Logged In' : ''}</p>
+    );
+  }
 
   render() {
     return (
@@ -14,10 +21,11 @@ class Navbar extends Component<Props, State> {
             <span className='text-lg font-bold'>ELS</span>
           </div>
           <div className='flex-none'>
-            <a className='btn btn-sm btn-info mr-5' href='*'>
+            {this.getLoginState()}
+            <a className='btn btn-sm btn-info mr-5' href='/login'>
               Login
             </a>
-            <a className='btn btn-sm btn-success mr-3' href='*'>
+            <a className='btn btn-sm btn-success mr-3' href='/register'>
               Register
             </a>
           </div>
@@ -27,4 +35,10 @@ class Navbar extends Component<Props, State> {
   }
 }
 
-export default Navbar;
+const mapStateToProps = (state: any) => {
+  return {
+    currentUserToken: state.userToken.currentUserToken.token,
+  };
+};
+
+export const Navbar = connect(mapStateToProps, {})(_Navbar);
