@@ -26,6 +26,7 @@ Route::resource('results', ResultController::class);
 Route::resource('progress', UserProgressController::class);
 Route::resource('users', UserController::class);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

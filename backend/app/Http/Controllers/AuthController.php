@@ -34,4 +34,31 @@ class AuthController extends Controller
 
         return response($response, 201);
     }
+
+    public function login(Request $request)
+    {
+        $login_credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string']
+        ]);
+
+        $user = User::where('email', $login_credentials['email'])->first();
+
+        if (!Hash::check($login_credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Wrong password'], 401);
+        }
+
+        if (!$user) {
+            return response()->json(['error' => 'User doesn\'t exist'], 400);
+        }
+
+        $token = $user->createToken('els_token')->plainTextToken;
+
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
+
+        return response($response, 201);
+    }
 }
