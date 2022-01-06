@@ -51,7 +51,9 @@ class _Navbar extends Component<Props> {
       <div>
         <div className='navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box'>
           <div className='flex-1 px-2 mx-2'>
-            <span className='text-lg font-bold'>ELS</span>
+            <span className='text-lg font-bold'>
+              <Link to='/'>ELS</Link>
+            </span>
           </div>
           <div className='flex-none'>{this.getLoginState()}</div>
         </div>

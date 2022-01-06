@@ -54,3 +54,8 @@ export interface LogoutUserAction {
   type: ActionTypes.logoutUser;
   payload: LogoutData;
 }
+
+export interface UserTokenActions {
+  type: ActionTypes;
+  payload: LoginData | RegistrationData | LogoutData;
+}

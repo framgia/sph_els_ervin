@@ -1,6 +1,11 @@
-import { RegisterUserAction, LoginUserAction } from '../actions/types';
-import { ActionTypes } from '../actions/types';
-import { LogoutUserAction } from '../actions/types';
+import {
+  RegisterUserAction,
+  LoginUserAction,
+  ActionTypes,
+  UserTokenActions,
+  LogoutUserAction,
+  AuthenticationPayloadData,
+} from '../actions/types';
 
 export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
   switch (action.type) {
@@ -29,11 +34,13 @@ export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
   }
 };
 
-const SessionData = localStorage.getItem('SessionData')
+const SessionData: AuthenticationPayloadData = localStorage.getItem(
+  'SessionData'
+)
   ? JSON.parse(localStorage.getItem('SessionData') || '')
   : '';
 
-export const UserTokenReducer = (state = { SessionData }, action: any): any => {
+export const userTokenReducer = (state = { SessionData }, action: any): any => {
   switch (action.type) {
     case ActionTypes.loginUser:
       return { ...state, SessionData: action.payload };
