@@ -58,7 +58,17 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ];
-
         return response($response, 201);
+    }
+
+    public function logout(Request $request)
+    {
+        $id = $request->validate([
+            'user_id' => ['required', 'numeric']
+        ]);
+        $user = User::findOrFail($id)->first();
+        $user->tokens()->delete();
+
+        return response()->json(['success' => 'Logged Out'], 201);
     }
 }

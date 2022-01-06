@@ -1,5 +1,6 @@
 import { RegisterUserAction, LoginUserAction } from '../actions/types';
 import { ActionTypes } from '../actions/types';
+import { LogoutUserAction } from '../actions/types';
 
 export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
   switch (action.type) {
@@ -19,18 +20,27 @@ export const loginUserReducer = (state = {}, action: LoginUserAction) => {
   }
 };
 
-const currentUserToken = localStorage.getItem('currentUserToken')
-  ? JSON.parse(localStorage.getItem('currentUserToken') || '')
+export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
+  switch (action.type) {
+    case ActionTypes.logoutUser:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const SessionData = localStorage.getItem('SessionData')
+  ? JSON.parse(localStorage.getItem('SessionData') || '')
   : '';
 
-export const UserTokenReducer = (state = { currentUserToken }, action: any) => {
+export const UserTokenReducer = (state = { SessionData }, action: any): any => {
   switch (action.type) {
-    case ActionTypes.getCurrentUserToken:
-      return action.payload;
     case ActionTypes.loginUser:
-      return { ...state, currentUserToken: action.payload };
+      return { ...state, SessionData: action.payload };
+    case ActionTypes.logoutUser:
+      return { ...state, SessionData: null };
     case ActionTypes.registerUser:
-      return { ...state, currentUserToken: action.payload };
+      return { ...state, SessionData: action.payload };
     default:
       return state;
   }

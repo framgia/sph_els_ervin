@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
+import { LogoutData, LogoutUserAction } from './types';
 import {
   ActionTypes,
   LoginData,
@@ -7,8 +8,7 @@ import {
   RegisterUserAction,
   RegistrationData,
 } from './types';
-
-const url = 'http://127.0.0.1:8000/api';
+import { url } from './config';
 
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
@@ -22,6 +22,9 @@ export const registerUser = (registration_data: RegistrationData) => {
           type: ActionTypes.registerUser,
           payload: res.data,
         });
+
+        localStorage.setItem('SessionData', JSON.stringify(res.data));
+
         alert('Success!');
       });
   };
@@ -37,12 +40,24 @@ export const loginUser = (login_data: LoginData) => {
           payload: res.data,
         });
 
-        localStorage.setItem(
-          'currentUserToken',
-          JSON.stringify(res.data.token)
-        );
+        localStorage.setItem('SessionData', JSON.stringify(res.data));
 
         alert('Success!');
       });
+  };
+};
+
+export const logoutUser = (logoutData: LogoutData) => {
+  return async (dispatch: Dispatch) => {
+    console.log(logoutData);
+    await axios.post(`${url}/logout`, { user_id: logoutData }).then((res) => {
+      dispatch<LogoutUserAction>({
+        type: ActionTypes.logoutUser,
+        payload: res.data,
+      });
+
+      localStorage.removeItem('SessionData');
+      alert('Success!');
+    });
   };
 };
