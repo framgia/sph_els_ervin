@@ -3,6 +3,7 @@ import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
 import { logoutUser } from '../actions/user';
+import { Link } from 'react-router-dom';
 interface Props {
   SessionData?: {
     user: User;
@@ -33,12 +34,12 @@ class _Navbar extends Component<Props> {
           </div>
         ) : (
           <div>
-            <a className='btn btn-sm btn-info mr-5' href='/login'>
+            <Link to={'/login'} className='btn btn-sm btn-info mr-5'>
               Login
-            </a>
-            <a className='btn btn-sm btn-success mr-3' href='/register'>
+            </Link>
+            <Link to={'/register'} className='btn btn-sm btn-success mr-3'>
               Register
-            </a>
+            </Link>
           </div>
         )}
       </div>
