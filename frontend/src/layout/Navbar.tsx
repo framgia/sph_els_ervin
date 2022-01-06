@@ -1,15 +1,48 @@
 import React, { Component } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
-
+import { User } from '../actions/types';
+import { logoutUser } from '../actions/user';
+import { Link } from 'react-router-dom';
 interface Props {
-  currentUserToken: string;
+  SessionData?: {
+    user: User;
+    token: string;
+  };
+  logoutUser: Function;
 }
 
 class _Navbar extends Component<Props> {
+  logoutSession = (): void => {
+    if (this.props.SessionData) {
+      this.props.logoutUser(this.props.SessionData.user.id);
+    }
+  };
+
   getLoginState() {
     return (
-      <p className='mr-2'>{this.props.currentUserToken ? 'Logged In' : ''}</p>
+      <div className='mr-2'>
+        {this.props.SessionData ? (
+          <div>
+            <span className='text-lg font-bold mr-4'>{`Hello, ${this.props.SessionData.user.name}!`}</span>
+            <button
+              className='btn btn-sm btn-info mr-5'
+              onClick={this.logoutSession}
+            >
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div>
+            <Link to='/login' className='btn btn-sm btn-info mr-5'>
+              Login
+            </Link>
+            <Link to='/register' className='btn btn-sm btn-success mr-3'>
+              Register
+            </Link>
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -20,15 +53,7 @@ class _Navbar extends Component<Props> {
           <div className='flex-1 px-2 mx-2'>
             <span className='text-lg font-bold'>ELS</span>
           </div>
-          <div className='flex-none'>
-            {this.getLoginState()}
-            <a className='btn btn-sm btn-info mr-5' href='/login'>
-              Login
-            </a>
-            <a className='btn btn-sm btn-success mr-3' href='/register'>
-              Register
-            </a>
-          </div>
+          <div className='flex-none'>{this.getLoginState()}</div>
         </div>
       </div>
     );
@@ -37,8 +62,8 @@ class _Navbar extends Component<Props> {
 
 const mapStateToProps = (state: any) => {
   return {
-    currentUserToken: state.userToken.currentUserToken.token,
+    SessionData: state.userToken.SessionData,
   };
 };
 
-export const Navbar = connect(mapStateToProps, {})(_Navbar);
+export const Navbar = connect(mapStateToProps, { logoutUser })(_Navbar);

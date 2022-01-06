@@ -1,7 +1,7 @@
 export enum ActionTypes {
   registerUser,
   loginUser,
-  getCurrentUserToken,
+  logoutUser,
 }
 
 export interface RegistrationData {
@@ -29,7 +29,7 @@ export interface UserToken {
   currentUserToken: string;
 }
 
-type User = {
+export type User = {
   avatar: string;
   email: string;
   id: number;
@@ -44,4 +44,13 @@ type User = {
 export interface AuthenticationPayloadData {
   token: string;
   user: User;
+}
+
+export interface LogoutData {
+  user_id: number;
+}
+
+export interface LogoutUserAction {
+  type: ActionTypes.logoutUser;
+  payload: LogoutData;
 }
