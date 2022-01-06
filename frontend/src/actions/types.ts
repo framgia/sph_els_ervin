@@ -32,8 +32,8 @@ export interface UserToken {
 export type User = {
   avatar: string;
   email: string;
-  id: Number;
-  is_admin: Number;
+  id: number;
+  is_admin: number;
   name: string;
   created_at: Date;
   updated_at: Date;
@@ -47,7 +47,7 @@ export interface AuthenticationPayloadData {
 }
 
 export interface LogoutData {
-  user_id: Number;
+  user_id: number;
 }
 
 export interface LogoutUserAction {

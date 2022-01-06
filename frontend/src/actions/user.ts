@@ -49,7 +49,6 @@ export const loginUser = (login_data: LoginData) => {
 
 export const logoutUser = (logoutData: LogoutData) => {
   return async (dispatch: Dispatch) => {
-    console.log(logoutData);
     await axios.post(`${url}/logout`, { user_id: logoutData }).then((res) => {
       dispatch<LogoutUserAction>({
         type: ActionTypes.logoutUser,

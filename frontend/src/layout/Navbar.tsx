@@ -34,10 +34,10 @@ class _Navbar extends Component<Props> {
           </div>
         ) : (
           <div>
-            <Link to={'/login'} className='btn btn-sm btn-info mr-5'>
+            <Link to='/login' className='btn btn-sm btn-info mr-5'>
               Login
             </Link>
-            <Link to={'/register'} className='btn btn-sm btn-success mr-3'>
+            <Link to='/register' className='btn btn-sm btn-success mr-3'>
               Register
             </Link>
           </div>
