@@ -1,12 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { RegistrationData } from '../actions/types';
 import { registerUser } from '../actions/user';
+import { RegistrationData } from '../actions';
 import { useDispatch } from 'react-redux';
 
 export default function RegistrationPage() {
   const { register, handleSubmit } = useForm<RegistrationData>();
   const dispatch = useDispatch();
+
   const onSubmit = (data: RegistrationData) => {
     dispatch(registerUser(data));
   };

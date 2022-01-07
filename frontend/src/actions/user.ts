@@ -8,13 +8,14 @@ import {
   RegisterUserAction,
   RegistrationData,
 } from './types';
-import { url } from './config';
+
+import { config } from './config';
 
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     await axios
       .post<RegistrationData, any, RegistrationData>(
-        `${url}/register`,
+        `${config.URL}/register`,
         registration_data
       )
       .then((res) => {
@@ -33,7 +34,7 @@ export const registerUser = (registration_data: RegistrationData) => {
 export const loginUser = (login_data: LoginData) => {
   return async (dispatch: Dispatch) => {
     await axios
-      .post<LoginData, any, LoginData>(`${url}/login`, login_data)
+      .post<LoginData, any, LoginData>(`${config.URL}/login`, login_data)
       .then((res) => {
         dispatch<LoginUserAction>({
           type: ActionTypes.loginUser,
@@ -49,14 +50,16 @@ export const loginUser = (login_data: LoginData) => {
 
 export const logoutUser = (logoutData: LogoutData) => {
   return async (dispatch: Dispatch) => {
-    await axios.post(`${url}/logout`, { user_id: logoutData }).then((res) => {
-      dispatch<LogoutUserAction>({
-        type: ActionTypes.logoutUser,
-        payload: res.data,
-      });
+    await axios
+      .post(`${config.URL}/logout`, { user_id: logoutData })
+      .then((res) => {
+        dispatch<LogoutUserAction>({
+          type: ActionTypes.logoutUser,
+          payload: res.data,
+        });
 
-      localStorage.removeItem('SessionData');
-      alert('Success!');
-    });
+        localStorage.removeItem('SessionData');
+        alert('Success!');
+      });
   };
 };
