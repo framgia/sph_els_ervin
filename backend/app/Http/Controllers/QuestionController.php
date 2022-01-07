@@ -9,7 +9,11 @@ use Illuminate\Support\Str;
 
 class QuestionController extends Controller
 {
+<<<<<<< HEAD
     const STORAGE_PATH = 'public/questions';
+=======
+    const STORAGE_PATH = 'questions';
+>>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
     /**
      * Display a listing of the resource.
      *
@@ -17,10 +21,14 @@ class QuestionController extends Controller
      */
     public function index(Category $category)
     {
+<<<<<<< HEAD
         $question = Question::with(['category' => function ($query) use ($category) {
             $query->where('id', $category->id);
         }])->get();
         return $this->showAll($question);
+=======
+        return $this->showAll(Question::all()->where('category_id', $category->id));
+>>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
     }
 
     /**
@@ -49,8 +57,13 @@ class QuestionController extends Controller
         $question = Question::create([
             'category_id' => $category->id,
             'question' => $question_data['question'],
+<<<<<<< HEAD
             'slug' => Str::slug($question_data['question']),
             'image' => $request->file('image')->store($this::STORAGE_PATH)
+=======
+            'slug' => $this->createSlug($question_data['question']),
+            'image' => $request->file('image')->store($this->STORAGE_PATH)
+>>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
         ]);
 
         return $this->showOne($question);

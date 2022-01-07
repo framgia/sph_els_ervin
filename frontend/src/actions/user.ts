@@ -25,7 +25,6 @@ export const registerUser = (registration_data: RegistrationData) => {
         });
 
         localStorage.setItem('SessionData', JSON.stringify(res.data));
-
         alert('Success!');
       });
   };
@@ -47,10 +46,14 @@ export const loginUser = (login_data: LoginData) => {
   };
 };
 
-export const logoutUser = (logoutData: LogoutData) => {
+export const logoutUser = ({ user_id, token }: LogoutData) => {
   return async (dispatch: Dispatch) => {
     await axios
-      .post(`${config.URL}/logout`, { user_id: logoutData })
+      .post(
+        `${config.URL}/logout`,
+        { user_id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
       .then((res) => {
         dispatch<LogoutUserAction>({
           type: ActionTypes.logoutUser,

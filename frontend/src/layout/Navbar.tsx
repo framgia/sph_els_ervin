@@ -15,7 +15,10 @@ interface Props {
 class _Navbar extends Component<Props> {
   logoutSession = (): void => {
     if (this.props.SessionData) {
-      this.props.logoutUser(this.props.SessionData.user.id);
+      this.props.logoutUser({
+        user_id: this.props.SessionData.user.id,
+        token: this.props.SessionData.token,
+      });
     }
   };
 

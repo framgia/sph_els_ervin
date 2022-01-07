@@ -32,8 +32,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('categories', CategoryController::class);
+<<<<<<< HEAD
     Route::resource('categories.questions', QuestionController::class);
     Route::resource('follows', FollowController::class);
     Route::resource('results', ResultController::class);
     Route::resource('progress', UserProgressController::class);
+=======
+    Route::post('logout', [AuthController::class, 'logout']);
+>>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
 });

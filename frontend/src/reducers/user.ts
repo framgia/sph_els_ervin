@@ -37,8 +37,8 @@ export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
 const SessionData: AuthenticationPayloadData = localStorage.getItem(
   'SessionData'
 )
-  ? JSON.parse(localStorage.getItem('SessionData') || '')
-  : '';
+  ? { SessionData: JSON.parse(localStorage.getItem('SessionData') || '') }
+  : { SessionData: '' };
 
 export const userTokenReducer = (
   state: AuthenticationPayloadData = SessionData,
