@@ -18,7 +18,8 @@ class QuestionFactory extends Factory
         return [
             'category_id' => $this->faker->randomElement(Category::all()->pluck('id')),
             'question' => $this->faker->word(),
-            'image' => 'default.png'
+            'image' => 'default.png',
+            'slug' => $this->faker->slug()
         ];
     }
 }

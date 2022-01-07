@@ -10,6 +10,11 @@ class Question extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function choices()
     {
         return $this->hasMany(Choice::class);

@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        return $this->showAll(Category::all());
     }
 
     /**
@@ -25,8 +25,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category_data = $request->validate([
+            'title' => ['required', 'string', 'unique:categories,title'],
+            'description' => ['required', 'string']
+        ]);
+
+        $category = Category::create([
+            'title' => $category_data['title'],
+            'description' => $category_data['description'],
+            'slug' => $this->createSlug($category_data['title'])
+        ]);
+
+        return $this->showOne($category);
     }
+
 
     /**
      * Display the specified resource.
@@ -36,7 +48,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return $this->showOne($category);
     }
 
     /**
@@ -48,7 +60,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->fill($request->validate([
+            'title' => ['string', 'unique:categories,title,' . $category->title],
+            'description' => ['string']
+        ]));
+
+        if ($category->isClean()) {
+            return $this->errorResponse('Please specify new data', 422);
+        }
+
+        $category->save();
+
+        return $this->showOne($category);
     }
 
     /**
@@ -59,6 +82,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return $this->showOne($category);
     }
 }

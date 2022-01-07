@@ -18,6 +18,7 @@ class CreateQuestionsTable extends Migration
             $table->foreignId('category_id');
             $table->string('question');
             $table->string('image');
+            $table->text('slug');
             $table->timestamps();
             $table->softDeletes();
         });

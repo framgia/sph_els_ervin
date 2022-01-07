@@ -42,7 +42,6 @@ export const loginUser = (login_data: LoginData) => {
         });
 
         localStorage.setItem('SessionData', JSON.stringify(res.data));
-
         alert('Success!');
       });
   };
@@ -59,7 +58,7 @@ export const logoutUser = (logoutData: LogoutData) => {
         });
 
         localStorage.removeItem('SessionData');
-        alert('Success!');
       });
+    alert('Success!');
   };
 };

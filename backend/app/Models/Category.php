@@ -10,6 +10,11 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function questions()
     {
         return $this->hasMany(Question::class);

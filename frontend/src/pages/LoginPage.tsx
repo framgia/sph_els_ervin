@@ -1,12 +1,13 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { LoginData } from '../actions/types';
 import { loginUser } from '../actions/user';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 export default function LoginPage() {
   const { register, handleSubmit } = useForm<LoginData>();
   const dispatch = useDispatch();
+
   const onSubmit = (data: LoginData) => {
     dispatch(loginUser(data));
   };
