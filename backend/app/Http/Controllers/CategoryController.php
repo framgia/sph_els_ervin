@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -33,7 +34,7 @@ class CategoryController extends Controller
         $category = Category::create([
             'title' => $category_data['title'],
             'description' => $category_data['description'],
-            'slug' => $this->createSlug($category_data['title'])
+            'slug' => Str::slug($category_data['title'])
         ]);
 
         return $this->showOne($category);

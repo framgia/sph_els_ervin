@@ -11,14 +11,4 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ApiResponder;
-
-
-    // string to lowercase
-    // Spaces to dashes
-    // Ex: Hello World -> hello-world
-
-    protected function createSlug($title)
-    {
-        return str_replace(" ", "-", strtolower($title));
-    }
 }

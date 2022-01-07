@@ -21,9 +21,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('follows', FollowController::class);
-Route::resource('results', ResultController::class);
-Route::resource('progress', UserProgressController::class);
 Route::resource('users', UserController::class);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -34,7 +31,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::resource('questions', QuestionController::class);
     Route::resource('categories', CategoryController::class);
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::resource('categories.questions', QuestionController::class);
+    Route::resource('follows', FollowController::class);
+    Route::resource('results', ResultController::class);
+    Route::resource('progress', UserProgressController::class);
 });

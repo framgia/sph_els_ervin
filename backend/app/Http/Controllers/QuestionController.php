@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class QuestionController extends Controller
 {
-    const STORAGE_PATH = 'questions';
+    const STORAGE_PATH = 'public/questions';
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +17,10 @@ class QuestionController extends Controller
      */
     public function index(Category $category)
     {
-        return $this->showAll(Question::all()->where('category_id', $category->id));
+        $question = Question::with(['category' => function ($query) use ($category) {
+            $query->where('id', $category->id);
+        }])->get();
+        return $this->showAll($question);
     }
 
     /**
@@ -45,8 +49,8 @@ class QuestionController extends Controller
         $question = Question::create([
             'category_id' => $category->id,
             'question' => $question_data['question'],
-            'slug' => $this->createSlug($question_data['question']),
-            'image' => $request->file('image')->store($this->STORAGE_PATH)
+            'slug' => Str::slug($question_data['question']),
+            'image' => $request->file('image')->store($this::STORAGE_PATH)
         ]);
 
         return $this->showOne($question);
