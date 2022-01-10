@@ -16,7 +16,7 @@ interface AppProps {
 }
 
 function App(props: AppProps) {
-  // Rename this to something better
+  // Updated to AuthRoute Component with React Router in a future branch
   const redirectIfNotLoggedIn = (component: JSX.Element): JSX.Element => {
     return props.SessionData.user ? (
       <Navigate to='/' replace={true} />
