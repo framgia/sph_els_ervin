@@ -11,17 +11,4 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ApiResponder;
-<<<<<<< HEAD
-=======
-
-
-    // string to lowercase
-    // Spaces to dashes
-    // Ex: Hello World -> hello-world
-
-    protected function createSlug($title)
-    {
-        return str_replace(" ", "-", strtolower($title));
-    }
->>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
 }

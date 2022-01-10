@@ -34,11 +34,7 @@ class CategoryController extends Controller
         $category = Category::create([
             'title' => $category_data['title'],
             'description' => $category_data['description'],
-<<<<<<< HEAD
             'slug' => Str::slug($category_data['title'])
-=======
-            'slug' => $this->createSlug($category_data['title'])
->>>>>>> [SELS-TASK] Create API Endpoints: Categories & Questions
         ]);
 
         return $this->showOne($category);
