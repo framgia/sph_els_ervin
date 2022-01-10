@@ -34,10 +34,10 @@ class _Navbar extends Component<Props> {
               onClick={this.logoutSession}
             >
               {this.props.loading ? (
-                <div className='flex items-center justify-center'>
-                  <div className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></div>
+                <span className='flex items-center justify-center'>
+                  <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
                   Logout
-                </div>
+                </span>
               ) : (
                 'Logout'
               )}
@@ -57,7 +57,7 @@ class _Navbar extends Component<Props> {
     );
   }
 
-  getLoginState() {
+  render() {
     return (
       <div>
         <div className='navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box'>

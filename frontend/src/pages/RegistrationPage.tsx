@@ -99,10 +99,10 @@ function RegistrationPage(props: Props) {
           <FormError message={errors.password_confirmation?.message} />
           <button className='btn btn-info mt-5 w-1/2 mx-auto' type='submit'>
             {props.loading ? (
-              <div className='flex items-center justify-center'>
-                <div className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></div>
+              <span className='flex items-center justify-center'>
+                <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
                 Register
-              </div>
+              </span>
             ) : (
               'Register'
             )}
