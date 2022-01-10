@@ -1,11 +1,15 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { registerUser } from '../actions/user';
-import { RegistrationData } from '../actions';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import FormError from '../components/FormError';
+import { RegistrationData } from '../actions/types';
 
-export default function RegistrationPage() {
+interface Props {
+  loading: boolean;
+}
+
+function RegistrationPage(props: Props) {
   // This has to be inside to access password.current for validation
   const registrationDataValidation = {
     email: {
@@ -93,13 +97,26 @@ export default function RegistrationPage() {
             )}
           />
           <FormError message={errors.password_confirmation?.message} />
-          <input
-            className='btn btn-info mt-5 w-1/2 mx-auto'
-            type='submit'
-            value='Register'
-          />
+          <button className='btn btn-info mt-5 w-1/2 mx-auto' type='submit'>
+            {props.loading ? (
+              <span className='flex items-center justify-center'>
+                <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
+                Register
+              </span>
+            ) : (
+              'Register'
+            )}
+          </button>
         </form>
       </div>
     </div>
   );
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    loading: state.register.loading,
+  };
+};
+
+export default connect(mapStateToProps)(RegistrationPage);

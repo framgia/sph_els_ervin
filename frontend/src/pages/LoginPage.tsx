@@ -1,11 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { LoginData } from '../actions/types';
 import { loginUser } from '../actions/user';
 import { useForm } from 'react-hook-form';
 import FormError from '../components/FormError';
 
-function LoginPage() {
+interface Props {
+  loading: boolean;
+}
+
+function LoginPage(props: Props) {
   const loginDataValidation = {
     email: {
       required: {
@@ -57,15 +61,26 @@ function LoginPage() {
             {...register('password', loginDataValidation.password)}
           />
           <FormError message={errors.password?.message} />
-          <input
-            className='btn btn-info mt-5 w-1/2 mx-auto'
-            type='submit'
-            value='Login'
-          />
+          <button className='btn btn-info mt-5 w-1/2 mx-auto' type='submit'>
+            {props.loading ? (
+              <span className='flex items-center justify-center'>
+                <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
+                Login
+              </span>
+            ) : (
+              'Login'
+            )}
+          </button>
         </form>
       </div>
     </div>
   );
 }
 
-export default LoginPage;
+const mapStateToProps = (state: any) => {
+  return {
+    loading: state.login.loading,
+  };
+};
+
+export default connect(mapStateToProps)(LoginPage);

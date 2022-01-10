@@ -1,9 +1,20 @@
-export enum ActionTypes {
-  registerUser,
-  loginUser,
-  logoutUser,
+export enum registerTypes {
+  registerUserRequest,
+  registerUserSuccess,
+  registerUserError,
 }
 
+export enum loginTypes {
+  loginUserRequest,
+  loginUserSuccess,
+  loginUserError,
+}
+
+export enum logoutTypes {
+  logoutUserRequest,
+  logoutUserSuccess,
+  logoutUserError,
+}
 export interface RegistrationData {
   email: string;
   name: string;
@@ -11,8 +22,8 @@ export interface RegistrationData {
   password_confirmation: string;
 }
 export interface RegisterUserAction {
-  type: ActionTypes.registerUser;
-  payload: AuthenticationPayloadData;
+  type: registerTypes;
+  payload?: AuthenticationPayloadData;
 }
 
 export interface LoginData {
@@ -21,8 +32,8 @@ export interface LoginData {
 }
 
 export interface LoginUserAction {
-  type: ActionTypes.loginUser;
-  payload: AuthenticationPayloadData;
+  type: loginTypes;
+  payload?: AuthenticationPayloadData;
 }
 
 export interface UserToken {
@@ -54,11 +65,11 @@ export interface LogoutData {
 }
 
 export interface LogoutUserAction {
-  type: ActionTypes.logoutUser;
-  payload: LogoutData;
+  type: logoutTypes;
+  payload?: LogoutData;
 }
 
 export interface UserTokenActions {
-  type: ActionTypes;
+  type: registerTypes | loginTypes | logoutTypes;
   payload: LoginData | RegistrationData | LogoutData;
 }

@@ -1,7 +1,7 @@
+import { registerTypes, loginTypes, logoutTypes } from '../actions/types';
 import {
   RegisterUserAction,
   LoginUserAction,
-  ActionTypes,
   UserTokenActions,
   LogoutUserAction,
   AuthenticationPayloadData,
@@ -9,8 +9,16 @@ import {
 
 export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
   switch (action.type) {
-    case ActionTypes.registerUser:
-      return action.payload;
+    case registerTypes.registerUserRequest:
+      return {
+        ...state,
+        loading: true,
+      };
+    case registerTypes.registerUserSuccess:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       return state;
   }
@@ -18,8 +26,16 @@ export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
 
 export const loginUserReducer = (state = {}, action: LoginUserAction) => {
   switch (action.type) {
-    case ActionTypes.loginUser:
-      return action.payload;
+    case loginTypes.loginUserRequest:
+      return {
+        ...state,
+        loading: true,
+      };
+    case loginTypes.loginUserSuccess:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       return state;
   }
@@ -27,8 +43,16 @@ export const loginUserReducer = (state = {}, action: LoginUserAction) => {
 
 export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
   switch (action.type) {
-    case ActionTypes.logoutUser:
-      return action.payload;
+    case logoutTypes.logoutUserRequest:
+      return {
+        ...state,
+        loading: true,
+      };
+    case logoutTypes.logoutUserSuccess:
+      return {
+        ...state,
+        loading: false,
+      };
     default:
       return state;
   }
@@ -45,11 +69,11 @@ export const userTokenReducer = (
   action: UserTokenActions
 ) => {
   switch (action.type) {
-    case ActionTypes.loginUser:
+    case loginTypes.loginUserSuccess:
       return { ...state, SessionData: action.payload };
-    case ActionTypes.logoutUser:
+    case logoutTypes.logoutUserSuccess:
       return { ...state, SessionData: null };
-    case ActionTypes.registerUser:
+    case registerTypes.registerUserSuccess:
       return { ...state, SessionData: action.payload };
     default:
       return state;
