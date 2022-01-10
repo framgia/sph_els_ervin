@@ -16,7 +16,8 @@ class AuthController extends Controller
         $user_data = $request->validate([
             'email' => ['required', 'string', 'email', 'unique:users,email'],
             'name' => ['required', 'string'],
-            'password' => ['required', 'string', 'confirmed']
+            'password' => ['required', 'string', 'confirmed', 'min:8'],
+            'password_confirmation' => ['required', 'string', 'min:8']
         ]);
 
         // Create the user

@@ -42,12 +42,15 @@ export type User = {
 };
 
 export interface AuthenticationPayloadData {
-  token: string;
-  user: User;
+  SessionData: {
+    token: string;
+    user: User;
+  };
 }
 
 export interface LogoutData {
   user_id: number;
+  token: string;
 }
 
 export interface LogoutUserAction {

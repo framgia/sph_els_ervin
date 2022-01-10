@@ -2,10 +2,38 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { LoginData } from '../actions/types';
 import { loginUser } from '../actions/user';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import FormError from '../components/FormError';
 
-export default function LoginPage() {
-  const { register, handleSubmit } = useForm<LoginData>();
+function LoginPage() {
+  const loginDataValidation = {
+    email: {
+      required: {
+        value: true,
+        message: 'This field is required',
+      },
+      pattern: {
+        value: /.+@{1}.+[.]{1}.+/,
+        message: 'This field must be a valid email',
+      },
+    },
+    password: {
+      required: {
+        value: true,
+        message: 'This field is required',
+      },
+      minLength: {
+        value: 8,
+        message: 'Password must have at least 8 characters',
+      },
+    },
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginData>();
   const dispatch = useDispatch();
 
   const onSubmit = (data: LoginData) => {
@@ -17,9 +45,18 @@ export default function LoginPage() {
       <div className='p-10 card bg-base-200'>
         <form onSubmit={handleSubmit(onSubmit)} className='form-control'>
           <label className='label'>Email</label>
-          <input className='input' {...register('email')} />
+          <input
+            className='input'
+            {...register('email', loginDataValidation.email)}
+          />
+          <FormError message={errors.email?.message} />
           <label className='label'>Password</label>
-          <input type='password' className='input' {...register('password')} />
+          <input
+            type='password'
+            className='input'
+            {...register('password', loginDataValidation.password)}
+          />
+          <FormError message={errors.password?.message} />
           <input
             className='btn btn-info mt-5 w-1/2 mx-auto'
             type='submit'
@@ -30,3 +67,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default LoginPage;
