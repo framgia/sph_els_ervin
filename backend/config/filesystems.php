@@ -43,7 +43,7 @@ return [
         ],
         'images' => [
             'driver' => 'local',
-            'root' => public_path('user_avatars'),
+            'root' => public_path('images'),
             'visibility' => 'public',
         ],
         's3' => [

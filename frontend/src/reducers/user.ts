@@ -40,7 +40,10 @@ const SessionData: AuthenticationPayloadData = localStorage.getItem(
   ? JSON.parse(localStorage.getItem('SessionData') || '')
   : '';
 
-export const userTokenReducer = (state = { SessionData }, action: any): any => {
+export const userTokenReducer = (
+  state: AuthenticationPayloadData = SessionData,
+  action: UserTokenActions
+) => {
   switch (action.type) {
     case ActionTypes.loginUser:
       return { ...state, SessionData: action.payload };
