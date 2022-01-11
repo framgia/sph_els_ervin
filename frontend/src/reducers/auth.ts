@@ -1,4 +1,4 @@
-import { registerTypes, loginTypes, logoutTypes } from '../actions/types';
+import { types } from '../actions/types';
 import {
   RegisterUserAction,
   LoginUserAction,
@@ -9,12 +9,12 @@ import {
 
 export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
   switch (action.type) {
-    case registerTypes.registerUserRequest:
+    case types.registerUserRequest:
       return {
         ...state,
         loading: true,
       };
-    case registerTypes.registerUserSuccess:
+    case types.registerUserSuccess:
       return {
         ...state,
         loading: false,
@@ -26,12 +26,12 @@ export const registerUserReducer = (state = {}, action: RegisterUserAction) => {
 
 export const loginUserReducer = (state = {}, action: LoginUserAction) => {
   switch (action.type) {
-    case loginTypes.loginUserRequest:
+    case types.loginUserRequest:
       return {
         ...state,
         loading: true,
       };
-    case loginTypes.loginUserSuccess:
+    case types.loginUserSuccess:
       return {
         ...state,
         loading: false,
@@ -43,12 +43,12 @@ export const loginUserReducer = (state = {}, action: LoginUserAction) => {
 
 export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
   switch (action.type) {
-    case logoutTypes.logoutUserRequest:
+    case types.logoutUserRequest:
       return {
         ...state,
         loading: true,
       };
-    case logoutTypes.logoutUserSuccess:
+    case types.logoutUserSuccess:
       return {
         ...state,
         loading: false,
@@ -69,11 +69,12 @@ export const userTokenReducer = (
   action: UserTokenActions
 ) => {
   switch (action.type) {
-    case loginTypes.loginUserSuccess:
+    case types.loginUserSuccess:
+      console.log('running');
       return { ...state, SessionData: action.payload };
-    case logoutTypes.logoutUserSuccess:
+    case types.logoutUserSuccess:
       return { ...state, SessionData: null };
-    case registerTypes.registerUserSuccess:
+    case types.registerUserSuccess:
       return { ...state, SessionData: action.payload };
     default:
       return state;

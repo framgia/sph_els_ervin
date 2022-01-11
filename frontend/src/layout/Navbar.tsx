@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import { Component, Fragment } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
-import { logoutUser } from '../actions/user';
+import { logoutUser } from '../actions/auth';
 import { Link } from 'react-router-dom';
 interface Props {
   SessionData: {
@@ -57,6 +57,19 @@ class _Navbar extends Component<Props> {
     );
   }
 
+  renderNavbarCategories() {
+    return (
+      <Fragment>
+        <Link className='btn btn-ghost btn-sm rounded-btn' to='/users'>
+          Users
+        </Link>
+        <Link className='btn btn-ghost btn-sm rounded-btn' to='/categories'>
+          Categories
+        </Link>
+      </Fragment>
+    );
+  }
+
   render() {
     return (
       <div>
@@ -67,25 +80,10 @@ class _Navbar extends Component<Props> {
             </span>
             <div className='flex-1 px-2 mx-2'>
               <div className='items-stretch hidden lg:flex'>
-                <a className='btn btn-ghost btn-sm rounded-btn' href='/'>
+                <Link className='btn btn-ghost btn-sm rounded-btn' to='/'>
                   Home
-                </a>
-                {this.props.SessionData.user && (
-                  <Fragment>
-                    <Link
-                      to='/users'
-                      className='btn btn-ghost btn-sm rounded-btn'
-                    >
-                      Users
-                    </Link>
-                    <Link
-                      to='/categories'
-                      className='btn btn-ghost btn-sm rounded-btn'
-                    >
-                      Categories
-                    </Link>
-                  </Fragment>
-                )}
+                </Link>
+                {this.props.SessionData.user && this.renderNavbarCategories()}
               </div>
             </div>
           </div>
