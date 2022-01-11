@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
@@ -65,6 +65,29 @@ class _Navbar extends Component<Props> {
             <span className='text-lg font-bold'>
               <Link to='/'>ELS</Link>
             </span>
+            <div className='flex-1 px-2 mx-2'>
+              <div className='items-stretch hidden lg:flex'>
+                <a className='btn btn-ghost btn-sm rounded-btn' href='/'>
+                  Home
+                </a>
+                {this.props.SessionData.user && (
+                  <Fragment>
+                    <Link
+                      to='/users'
+                      className='btn btn-ghost btn-sm rounded-btn'
+                    >
+                      Users
+                    </Link>
+                    <Link
+                      to='/categories'
+                      className='btn btn-ghost btn-sm rounded-btn'
+                    >
+                      Categories
+                    </Link>
+                  </Fragment>
+                )}
+              </div>
+            </div>
           </div>
           <div className='flex-none'>{this.getLoginState()}</div>
         </div>

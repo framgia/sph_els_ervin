@@ -52,5 +52,6 @@
   },
   "engines": {
     "node": "16.x"
-  }
+  },
+  "cracoConfig": "./craco.config.js"
 }
