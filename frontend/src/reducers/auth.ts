@@ -2,7 +2,7 @@ import { types } from '../actions/types';
 import {
   RegisterUserAction,
   LoginUserAction,
-  UserTokenActions,
+  UserTokenAction,
   LogoutUserAction,
   AuthenticationPayloadData,
 } from '../actions/types';
@@ -62,11 +62,11 @@ const SessionData: AuthenticationPayloadData = localStorage.getItem(
   'SessionData'
 )
   ? { SessionData: JSON.parse(localStorage.getItem('SessionData') || '') }
-  : { SessionData: '' };
+  : { SessionData: undefined };
 
 export const userTokenReducer = (
   state: AuthenticationPayloadData = SessionData,
-  action: UserTokenActions
+  action: UserTokenAction
 ) => {
   switch (action.type) {
     case types.loginUserSuccess:

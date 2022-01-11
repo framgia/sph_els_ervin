@@ -9,6 +9,7 @@ import {
 } from './types';
 
 import { config } from './config';
+
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     dispatch<RegisterUserAction>({
@@ -59,12 +60,11 @@ export const logoutUser = ({ user_id, token }: LogoutData) => {
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((res) => {
+        localStorage.removeItem('SessionData');
         dispatch<LogoutUserAction>({
           type: types.logoutUserSuccess,
           payload: res.data,
         });
-
-        localStorage.removeItem('SessionData');
       });
     alert('Success!');
   };

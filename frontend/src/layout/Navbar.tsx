@@ -3,11 +3,11 @@ import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
 import { logoutUser } from '../actions/auth';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 interface Props {
-  SessionData: {
-    user?: User;
-    token?: string;
+  SessionData?: {
+    user: User;
+    token: string;
   };
   logoutUser: Function;
   loading: boolean;
@@ -15,18 +15,19 @@ interface Props {
 
 class _Navbar extends Component<Props> {
   logoutSession = (): void => {
-    if (this.props.SessionData.user) {
+    if (this.props.SessionData) {
       this.props.logoutUser({
         user_id: this.props.SessionData.user.id,
         token: this.props.SessionData.token,
       });
+      <Navigate to='/' replace={true} />;
     }
   };
 
-  getLoginState() {
+  showLoginStatus() {
     return (
       <div className='mr-2'>
-        {this.props.SessionData.user ? (
+        {this.props.SessionData ? (
           <div>
             <span className='text-lg font-bold mr-4'>{`Hello, ${this.props.SessionData.user.name}!`}</span>
             <button
@@ -83,11 +84,11 @@ class _Navbar extends Component<Props> {
                 <Link className='btn btn-ghost btn-sm rounded-btn' to='/'>
                   Home
                 </Link>
-                {this.props.SessionData.user && this.renderNavbarCategories()}
+                {this.props.SessionData && this.renderNavbarCategories()}
               </div>
             </div>
           </div>
-          <div className='flex-none'>{this.getLoginState()}</div>
+          <div className='flex-none'>{this.showLoginStatus()}</div>
         </div>
       </div>
     );

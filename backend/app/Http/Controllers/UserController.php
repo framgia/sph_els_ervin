@@ -14,4 +14,9 @@ class UserController extends Controller
     {
         return User::all();
     }
+
+    public function show(User $user)
+    {
+        return $this->showOne($user);
+    }
 }

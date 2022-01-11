@@ -3,18 +3,18 @@ import { connect, useDispatch } from 'react-redux';
 import { User } from '../../actions/types';
 import Loading from '../../components/Loading';
 import { config } from '../../actions/config';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export interface IAppProps {}
 
 function ListUsersPage(props: IAppProps) {
-  const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getUsersList();
-  }, [dispatch]);
+  }, []);
 
   const getUsersList = async () => {
     await axios.get(`${config.URL}/users`).then((res) => {
@@ -34,7 +34,7 @@ function ListUsersPage(props: IAppProps) {
           />
         </td>
         <td>
-          <a href=''>{user.name}</a>
+          <Link to={`/users/${user.id}`}>{user.name}</Link>
         </td>
         <td>{user.email}</td>
         <td>
