@@ -65,6 +65,31 @@ class _Navbar extends Component<Props> {
             <span className='text-lg font-bold'>
               <Link to='/'>ELS</Link>
             </span>
+            <div className='flex-1 px-2 mx-2'>
+              <div className='items-stretch hidden lg:flex'>
+                <a className='btn btn-ghost btn-sm rounded-btn' href='/'>
+                  Home
+                </a>
+                {this.props.SessionData.user ? (
+                  <React.Fragment>
+                    <Link
+                      to='/users'
+                      className='btn btn-ghost btn-sm rounded-btn'
+                    >
+                      Users
+                    </Link>
+                    <Link
+                      to='/categories'
+                      className='btn btn-ghost btn-sm rounded-btn'
+                    >
+                      Categories
+                    </Link>
+                  </React.Fragment>
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
           </div>
           <div className='flex-none'>{this.getLoginState()}</div>
         </div>
