@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import {
-  LogoutData,
-  LogoutUserAction,
-  registerTypes,
-  loginTypes,
-} from './types';
+import { LogoutData, LogoutUserAction, types } from './types';
 import {
   LoginData,
   LoginUserAction,
@@ -14,12 +9,10 @@ import {
 } from './types';
 
 import { config } from './config';
-import { logoutTypes } from './types';
-
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     dispatch<RegisterUserAction>({
-      type: registerTypes.registerUserRequest,
+      type: types.registerUserRequest,
     });
     await axios
       .post<RegistrationData, any, RegistrationData>(
@@ -28,7 +21,7 @@ export const registerUser = (registration_data: RegistrationData) => {
       )
       .then((res) => {
         dispatch<RegisterUserAction>({
-          type: registerTypes.registerUserSuccess,
+          type: types.registerUserSuccess,
           payload: res.data,
         });
         localStorage.setItem('SessionData', JSON.stringify(res.data));
@@ -39,13 +32,13 @@ export const registerUser = (registration_data: RegistrationData) => {
 export const loginUser = (login_data: LoginData) => {
   return async (dispatch: Dispatch) => {
     dispatch<LoginUserAction>({
-      type: loginTypes.loginUserRequest,
+      type: types.loginUserRequest,
     });
     await axios
       .post<LoginData, any, LoginData>(`${config.URL}/login`, login_data)
       .then((res) => {
         dispatch<LoginUserAction>({
-          type: loginTypes.loginUserSuccess,
+          type: types.loginUserSuccess,
           payload: res.data,
         });
 
@@ -57,7 +50,7 @@ export const loginUser = (login_data: LoginData) => {
 export const logoutUser = ({ user_id, token }: LogoutData) => {
   return async (dispatch: Dispatch) => {
     dispatch<LogoutUserAction>({
-      type: logoutTypes.logoutUserRequest,
+      type: types.logoutUserRequest,
     });
     await axios
       .post(
@@ -67,7 +60,7 @@ export const logoutUser = ({ user_id, token }: LogoutData) => {
       )
       .then((res) => {
         dispatch<LogoutUserAction>({
-          type: logoutTypes.logoutUserSuccess,
+          type: types.logoutUserSuccess,
           payload: res.data,
         });
 

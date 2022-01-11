@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { registerUser } from '../actions/user';
+import { RegistrationData } from '../../actions/types';
+import { registerUser } from '../../actions/auth';
 import { connect, useDispatch } from 'react-redux';
-import FormError from '../components/FormError';
-import { RegistrationData } from '../actions/types';
+import FormError from '../../components/FormError';
+import Loading from '../../components/Loading';
 
 interface Props {
   loading: boolean;
@@ -100,7 +101,7 @@ function RegistrationPage(props: Props) {
           <button className='btn btn-info mt-5 w-1/2 mx-auto' type='submit'>
             {props.loading ? (
               <span className='flex items-center justify-center'>
-                <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
+                <Loading />
                 Register
               </span>
             ) : (

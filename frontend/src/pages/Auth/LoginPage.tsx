@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { LoginData } from '../actions/types';
-import { loginUser } from '../actions/user';
+import { LoginData } from '../../actions/types';
+import { loginUser } from '../../actions/auth';
+import FormError from '../../components/FormError';
+import Loading from '../../components/Loading';
 import { useForm } from 'react-hook-form';
-import FormError from '../components/FormError';
 
 interface Props {
   loading: boolean;
@@ -64,7 +65,7 @@ function LoginPage(props: Props) {
           <button className='btn btn-info mt-5 w-1/2 mx-auto' type='submit'>
             {props.loading ? (
               <span className='flex items-center justify-center'>
-                <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
+                <Loading />
                 Login
               </span>
             ) : (

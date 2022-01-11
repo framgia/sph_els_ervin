@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
-import { logoutUser } from '../actions/user';
+import { logoutUser } from '../actions/auth';
 import { Link } from 'react-router-dom';
 interface Props {
   SessionData: {
@@ -57,6 +57,19 @@ class _Navbar extends Component<Props> {
     );
   }
 
+  renderNavbarCategories() {
+    return (
+      <React.Fragment>
+        <a className='btn btn-ghost btn-sm rounded-btn' href='/users'>
+          Users
+        </a>
+        <a className='btn btn-ghost btn-sm rounded-btn' href='/categories'>
+          Categories
+        </a>
+      </React.Fragment>
+    );
+  }
+
   render() {
     return (
       <div>
@@ -70,22 +83,7 @@ class _Navbar extends Component<Props> {
                 <a className='btn btn-ghost btn-sm rounded-btn' href='/'>
                   Home
                 </a>
-                {this.props.SessionData.user && (
-                  <Fragment>
-                    <Link
-                      to='/users'
-                      className='btn btn-ghost btn-sm rounded-btn'
-                    >
-                      Users
-                    </Link>
-                    <Link
-                      to='/categories'
-                      className='btn btn-ghost btn-sm rounded-btn'
-                    >
-                      Categories
-                    </Link>
-                  </Fragment>
-                )}
+                {this.props.SessionData.user && this.renderNavbarCategories()}
               </div>
             </div>
           </div>

@@ -1,20 +1,18 @@
-export enum registerTypes {
+export enum types {
   registerUserRequest,
   registerUserSuccess,
   registerUserError,
-}
-
-export enum loginTypes {
   loginUserRequest,
   loginUserSuccess,
   loginUserError,
-}
-
-export enum logoutTypes {
   logoutUserRequest,
   logoutUserSuccess,
   logoutUserError,
+  userListRequest,
+  userListSuccess,
+  userListError,
 }
+
 export interface RegistrationData {
   email: string;
   name: string;
@@ -22,7 +20,10 @@ export interface RegistrationData {
   password_confirmation: string;
 }
 export interface RegisterUserAction {
-  type: registerTypes;
+  type:
+    | types.registerUserRequest
+    | types.registerUserError
+    | types.registerUserSuccess;
   payload?: AuthenticationPayloadData;
 }
 
@@ -32,12 +33,20 @@ export interface LoginData {
 }
 
 export interface LoginUserAction {
-  type: loginTypes;
+  type: types.loginUserRequest | types.loginUserError | types.loginUserSuccess;
   payload?: AuthenticationPayloadData;
 }
 
 export interface UserToken {
   currentUserToken: string;
+}
+
+export interface UsersListData {
+  users: User[];
+}
+export interface UsersListAction {
+  type: types.userListRequest | types.userListSuccess | types.userListError;
+  payload?: UsersListData;
 }
 
 export type User = {
@@ -65,11 +74,11 @@ export interface LogoutData {
 }
 
 export interface LogoutUserAction {
-  type: logoutTypes;
+  type: types;
   payload?: LogoutData;
 }
 
 export interface UserTokenActions {
-  type: registerTypes | loginTypes | logoutTypes;
+  type: types;
   payload: LoginData | RegistrationData | LogoutData;
 }
