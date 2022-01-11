@@ -20,7 +20,7 @@ interface AppProps {
 function App(props: AppProps) {
   // Is changed to an AuthRoute component in the next PR
   const checkAuthStatus = () => {
-    return props.SessionData.user === null;
+    return !props.SessionData.user;
   };
 
   const redirectToAuth = () => {

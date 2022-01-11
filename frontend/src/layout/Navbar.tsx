@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import { Component, Fragment } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
 import { User } from '../actions/types';
@@ -59,14 +59,14 @@ class _Navbar extends Component<Props> {
 
   renderNavbarCategories() {
     return (
-      <React.Fragment>
-        <a className='btn btn-ghost btn-sm rounded-btn' href='/users'>
+      <Fragment>
+        <Link className='btn btn-ghost btn-sm rounded-btn' to='/users'>
           Users
-        </a>
-        <a className='btn btn-ghost btn-sm rounded-btn' href='/categories'>
+        </Link>
+        <Link className='btn btn-ghost btn-sm rounded-btn' to='/categories'>
           Categories
-        </a>
-      </React.Fragment>
+        </Link>
+      </Fragment>
     );
   }
 
@@ -80,9 +80,9 @@ class _Navbar extends Component<Props> {
             </span>
             <div className='flex-1 px-2 mx-2'>
               <div className='items-stretch hidden lg:flex'>
-                <a className='btn btn-ghost btn-sm rounded-btn' href='/'>
+                <Link className='btn btn-ghost btn-sm rounded-btn' to='/'>
                   Home
-                </a>
+                </Link>
                 {this.props.SessionData.user && this.renderNavbarCategories()}
               </div>
             </div>
