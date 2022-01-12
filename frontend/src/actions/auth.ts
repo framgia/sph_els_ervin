@@ -9,7 +9,6 @@ import {
 } from './types';
 
 import { config } from './config';
-
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     dispatch<RegisterUserAction>({

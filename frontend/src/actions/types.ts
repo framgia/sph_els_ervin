@@ -14,6 +14,15 @@ export enum types {
   userDataRequest,
   userDataSuccess,
   userDataError,
+  followUserRequest,
+  followUserSuccess,
+  followUserError,
+  unfollowUserRequest,
+  unfollowUserSuccess,
+  unfollowUserError,
+  getFollowListRequest,
+  getFollowListSuccess,
+  getFollowListError,
 }
 export interface RegistrationData {
   email: string;
@@ -90,4 +99,32 @@ export interface UserTokenAction {
 export interface UserDataAction {
   type: types;
   payload?: User;
+}
+
+export interface FollowRequestData {
+  follower: number;
+  following: number;
+}
+
+export interface FollowUserAction {
+  type: types;
+  payload?: FollowData;
+}
+
+export interface UnfollowUserAction {
+  type: types;
+  payload?: FollowData;
+}
+
+export interface FollowData {
+  id: number;
+  follower_id: number;
+  following_id: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface GetFollowListAction {
+  type: types;
+  payload?: FollowData[];
 }

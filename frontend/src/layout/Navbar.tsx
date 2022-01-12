@@ -60,14 +60,14 @@ class _Navbar extends Component<Props> {
 
   renderNavbarCategories() {
     return (
-      <Fragment>
-        <Link className='btn btn-ghost btn-sm rounded-btn' to='/users'>
+      <>
+        <Link to='/users' className='btn btn-ghost btn-sm rounded-btn'>
           Users
         </Link>
-        <Link className='btn btn-ghost btn-sm rounded-btn' to='/categories'>
+        <Link to='/categories' className='btn btn-ghost btn-sm rounded-btn'>
           Categories
         </Link>
-      </Fragment>
+      </>
     );
   }
 
@@ -81,7 +81,7 @@ class _Navbar extends Component<Props> {
             </span>
             <div className='flex-1 px-2 mx-2'>
               <div className='items-stretch hidden lg:flex'>
-                <Link className='btn btn-ghost btn-sm rounded-btn' to='/'>
+                <Link to='/' className='btn btn-ghost btn-sm rounded-btn'>
                   Home
                 </Link>
                 {this.props.SessionData && this.renderNavbarCategories()}

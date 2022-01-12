@@ -1,25 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { User } from '../../actions/types';
+import axios from 'axios';
+import { User, FollowData, SessionData } from '../../actions/types';
 import Loading from '../../components/Loading';
 import { config } from '../../actions/config';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { followUser, unfollowUser, getFollowList } from '../../actions/follows';
+import FollowButton from '../../components/FollowButton';
 
-export interface IAppProps {}
+export interface IAppProps {
+  followUser: Function;
+  unfollowUser: Function;
+  getFollowList: Function;
+  currentLogin?: SessionData;
+  followsList: FollowData[];
+}
 
 function ListUsersPage(props: IAppProps) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getUsersList();
-  }, []);
+    if (props.currentLogin) {
+      const {
+        token,
+        user: { id },
+      } = props.currentLogin;
+
+      dispatch(getFollowList(id, token));
+    }
+  }, [dispatch, props.currentLogin]);
 
   const getUsersList = async () => {
     await axios.get(`${config.URL}/users`).then((res) => {
       setLoading(false);
       setUsers(res.data);
+    });
+  };
+
+  const getFollowingIds = () => {
+    return props.followsList.map((followData: FollowData) => {
+      return followData.following_id;
     });
   };
 
@@ -39,9 +62,18 @@ function ListUsersPage(props: IAppProps) {
         <td>{user.email}</td>
         <td>
           <div>
-            <a href='#' className='btn btn-info'>
-              Follow
-            </a>
+            {/* {Logical Operators can be combined but this is easier to read} */}
+            {props.currentLogin &&
+              (user.id !== props.currentLogin.user.id ? (
+                <FollowButton
+                  userId={user.id}
+                  following={getFollowingIds().includes(user.id)}
+                />
+              ) : (
+                <Link to={`${user.id}`} className='btn btn-accent'>
+                  View Profile
+                </Link>
+              ))}
           </div>
         </td>
       </tr>
@@ -50,6 +82,7 @@ function ListUsersPage(props: IAppProps) {
 
   return (
     <div className='overflow-x-auto mt-4'>
+      {loading && <Loading />}
       <table className='table w-3/4 table-zebra mx-auto'>
         <thead>
           <tr>
@@ -59,15 +92,21 @@ function ListUsersPage(props: IAppProps) {
             <th>Actions</th>
           </tr>
         </thead>
-        {loading ? <Loading size={8} /> : null}
-        <tbody>{users ? renderBody() : ''}</tbody>
+        <tbody>{users && props.followsList && renderBody()}</tbody>
       </table>
     </div>
   );
 }
 
 const mapStateToProps = (state: any) => {
-  return {};
+  return {
+    currentLogin: state.userToken.SessionData,
+    followsList: state.follows.followsList,
+  };
 };
 
-export default connect(mapStateToProps, {})(ListUsersPage);
+export default connect(mapStateToProps, {
+  followUser,
+  unfollowUser,
+  getFollowList,
+})(ListUsersPage);
