@@ -10,6 +10,8 @@ class Question extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const DEFAULT_IMAGE = '/storage/questions/default.png';
+
     public function getRouteKeyName()
     {
         return 'slug';

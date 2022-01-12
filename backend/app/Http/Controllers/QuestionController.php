@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Question;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
@@ -50,7 +50,7 @@ class QuestionController extends Controller
             'category_id' => $category->id,
             'question' => $question_data['question'],
             'slug' => Str::slug($question_data['question']),
-            'image' => $request->file('image')->store($this::STORAGE_PATH)
+            'image' => $request->file('image')->store('questions')
         ]);
 
         return $this->showOne($question);
@@ -97,7 +97,7 @@ class QuestionController extends Controller
         }
 
         if ($question['image']->isDirty()) {
-            $request->file('image')->store($this->STORAGE_PATH);
+            $request->file('image')->store($this::STORAGE_PATH);
         }
 
         $question->save();

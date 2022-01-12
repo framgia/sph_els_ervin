@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('users', UserController::class);
+Route::resource('users', UserController::class)->only(['index', 'show']);
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
@@ -36,5 +36,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('follows', FollowController::class)->only('index', 'store', 'show');
     Route::resource('results', ResultController::class);
     Route::resource('progress', UserProgressController::class);
+    Route::put('users/{user}', [UserController::class, 'update']);
     Route::delete('follows', [FollowController::class, 'destroy']);
 });

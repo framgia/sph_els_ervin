@@ -1,4 +1,5 @@
 import { types } from '../actions/types';
+import { updateUser } from '../actions/auth';
 import {
   RegisterUserAction,
   LoginUserAction,
@@ -75,6 +76,11 @@ export const userTokenReducer = (
       return { ...state, SessionData: null };
     case types.registerUserSuccess:
       return { ...state, SessionData: action.payload };
+    case types.updateUser:
+      return {
+        ...state,
+        SessionData: { user: action.payload, token: state.SessionData.token },
+      };
     default:
       return state;
   }
