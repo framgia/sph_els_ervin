@@ -1,14 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Navbar } from './layout/Navbar';
-import {
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-  useNavigate,
-  useLocation,
-} from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { User } from './actions';
 

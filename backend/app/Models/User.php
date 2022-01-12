@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function following()
     {
-        return $this->hasMany(Follow::class, 'followed_id');
+        return $this->hasMany(Follow::class, 'following_id');
     }
 
     public function user_progess()

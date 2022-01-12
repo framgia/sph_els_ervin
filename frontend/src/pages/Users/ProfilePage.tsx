@@ -1,27 +1,44 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { SessionData, User } from '../../actions';
+import { useEffect, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { useParams, Link } from 'react-router-dom';
 import { config } from '../../actions/config';
 import Loading from '../../components/Loading';
+import { getFollowList, followUser, unfollowUser } from '../../actions/follows';
+import { FollowData } from '../../actions/types';
+import FollowButton from '../../components/FollowButton';
 
-interface IAppProps {
-  currentLogin: SessionData;
+export interface IAppProps {
+  followUser: Function;
+  unfollowUser: Function;
+  getFollowList: Function;
+  currentLogin?: SessionData;
+  followsList: FollowData[];
 }
 
 const ProfilePage = (props: IAppProps) => {
   const { userId } = useParams();
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
       getUser(parseInt(userId));
+      if (props.currentLogin) {
+        const {
+          token,
+          user: { id },
+        } = props.currentLogin;
+
+        dispatch(getFollowList(id, token));
+      }
     }
   }, []);
 
   const getUser = async (id: number) => {
+    if (!props.currentLogin) return;
     await axios
       .get(`${config.URL}/users/${id}`, {
         headers: {
@@ -34,10 +51,15 @@ const ProfilePage = (props: IAppProps) => {
       });
   };
 
-  const showProfile = () => {
-    if (!user) return;
+  const getFollowingIds = () => {
+    return props.followsList.map((followData: FollowData) => {
+      return followData.following_id;
+    });
+  };
 
-    const { avatar, name } = user;
+  const showProfile = () => {
+    if (!user || !props.currentLogin) return;
+    const { avatar, name, id } = user;
     const isCurrentUser = user.id === props.currentLogin.user.id;
 
     return (
@@ -47,7 +69,7 @@ const ProfilePage = (props: IAppProps) => {
             <div className='mt-2'>
               <img
                 src={config.IMG_URL + avatar}
-                className='inline object-cover w-64 h-64 rounded-full mx-auto'
+                className='object-cover w-64 h-64 rounded-full mx-auto'
                 alt='user avatar'
               />
             </div>
@@ -58,8 +80,19 @@ const ProfilePage = (props: IAppProps) => {
             {showFollowers()}
           </div>
           <div className='col-span-2'>
-            {!isCurrentUser && (
-              <button className='btn btn-accent px-5'>Follow</button>
+            {isCurrentUser ? (
+              <Link
+                className='btn btn-accent btn-active'
+                to={`/users/${props.currentLogin?.user.id}/edit`} // This is done on purpose to ensure the user can only edit their own profile
+              >
+                Edit Profile
+              </Link>
+            ) : (
+              <FollowButton
+                userId={id}
+                className='px-10'
+                following={getFollowingIds().includes(user.id)}
+              />
             )}
             <p className='mt-2'>Words Learned: 420</p>
           </div>
@@ -101,7 +134,12 @@ const ProfilePage = (props: IAppProps) => {
 const mapState2Props = (state: any) => {
   return {
     currentLogin: state.userToken.SessionData,
+    followsList: state.follows.followsList,
   };
 };
 
-export default connect(mapState2Props, {})(ProfilePage);
+export default connect(mapState2Props, {
+  getFollowList,
+  followUser,
+  unfollowUser,
+})(ProfilePage);

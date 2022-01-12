@@ -70,7 +70,6 @@ export const userTokenReducer = (
 ) => {
   switch (action.type) {
     case types.loginUserSuccess:
-      console.log('running');
       return { ...state, SessionData: action.payload };
     case types.logoutUserSuccess:
       return { ...state, SessionData: null };
