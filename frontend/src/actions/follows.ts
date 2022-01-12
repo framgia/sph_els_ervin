@@ -52,7 +52,7 @@ export const getFollowList = (user: number, token: string) => {
       type: types.getFollowListRequest,
     });
     await axios
-      .get(`${config.URL}/follows/${user}`, {
+      .get(`${config.URL}/follows/${user}/following`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

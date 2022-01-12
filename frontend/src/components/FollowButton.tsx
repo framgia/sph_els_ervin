@@ -2,6 +2,7 @@ import { connect, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { User, FollowRequestData } from '../actions/types';
 import { followUser, unfollowUser } from '../actions/follows';
+import { useEffect } from 'react';
 
 export interface IAppProps {
   followUser: Function;
@@ -11,13 +12,16 @@ export interface IAppProps {
     token: string;
   };
   following?: boolean;
-  userId: number;
   className?: string;
+  userId: number;
+  setFollowers?: Function;
+  followers?: number;
 }
 
 function FollowButton(props: IAppProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  useEffect(() => {}, [props.setFollowers]);
 
   const followUser = (follow: number) => {
     if (props.currentLogin) {
@@ -25,6 +29,9 @@ function FollowButton(props: IAppProps) {
         follower: props.currentLogin.user.id,
         following: follow,
       };
+      if (props.setFollowers && props.followers) {
+        props.setFollowers(props.followers + 1);
+      }
       dispatch(props.followUser(followData, props.currentLogin.token));
     } else {
       navigate('/login', { replace: true });
@@ -37,6 +44,9 @@ function FollowButton(props: IAppProps) {
         follower: props.currentLogin.user.id,
         following: follow,
       };
+      if (props.setFollowers && props.followers) {
+        props.setFollowers(props.followers - 1);
+      }
       dispatch(props.unfollowUser(followData, props.currentLogin.token));
     } else {
       navigate('/login', { replace: true });

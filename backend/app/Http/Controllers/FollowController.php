@@ -40,6 +40,16 @@ class FollowController extends Controller
         return response($follow, 201);
     }
 
+    public function following(User $user)
+    {
+        return $user->following;
+    }
+
+    public function followers(User $user)
+    {
+        return $user->followers;
+    }
+
     public function show($user)
     {
         return Follow::where('follower_id', $user)->get();
