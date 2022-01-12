@@ -26,7 +26,7 @@ class AuthController extends Controller
             'name' => $user_data['name'],
             'email' => $user_data['email'],
             'password' => bcrypt($user_data['password']), //Encrypt password
-            'avatar' => Storage::url('public/images/' . 'default.png'), //Default Image
+            'avatar' => Storage::url('public/avatars/' . 'default.png'), //Default Image
         ]);
 
         $token = $user->createToken('els_token')->plainTextToken;

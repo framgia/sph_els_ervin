@@ -1,3 +1,4 @@
+import { updateUser } from './auth';
 export enum types {
   registerUserRequest,
   registerUserSuccess,
@@ -8,6 +9,7 @@ export enum types {
   logoutUserRequest,
   logoutUserSuccess,
   logoutUserError,
+  updateUser,
   userListRequest,
   userListSuccess,
   userListError,

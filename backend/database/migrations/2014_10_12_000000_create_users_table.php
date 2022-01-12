@@ -12,6 +12,7 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
@@ -20,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('avatar')->default('default.png');
+            $table->string('avatar')->default(User::DEFAULT_AVATAR);
             $table->tinyInteger('is_admin')->default(User::REGULAR_USER);
             $table->rememberToken();
             $table->timestamps();

@@ -6,19 +6,32 @@ import { SessionData } from '../../../actions';
 import { config } from '../../../actions/config';
 import FormError from '../../../components/FormError';
 import Loading from '../../../components/Loading';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   currentLogin?: SessionData;
 }
 
 interface ProfileFormData {
-  avatar: File;
+  avatar: FileList;
   email: string;
   name: string;
 }
 
 function EditProfilePage({ currentLogin }: Props): ReactElement {
   const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm<ProfileFormData>({
+    defaultValues: {
+      email: currentLogin?.user.email,
+      name: currentLogin?.user.name,
+      avatar: undefined,
+    },
+  });
+  const navigate = useNavigate();
 
   const profileDataValidation = {
     email: {
@@ -31,20 +44,44 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
     avatar: {
       validate: {
         acceptedTypes: (files: any) =>
-          ['image/png', 'image/gif', 'image/jpeg'].includes(files[0].type) ||
-          'Invalid File Type',
+          ['image/png', 'image/gif', 'image/jpeg', undefined].includes(
+            files[0]?.type
+          ) || 'Invalid File Type',
       },
     },
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ProfileFormData>();
+  // Provided isDirty function from react hooks form is buggy
+  const isDirty = () => {
+    return (
+      dirtyFields.avatar !== undefined ||
+      dirtyFields.email !== undefined ||
+      dirtyFields.name !== undefined
+    );
+  };
 
-  const onSubmit = (data: ProfileFormData) => {
-    axios.patch(`${config.URL}/users/`);
+  const onSubmit = ({ avatar, name, email }: ProfileFormData) => {
+    if (!isDirty()) return;
+    if (!currentLogin) return;
+    const newAvatar = avatar[0];
+    const formData = new FormData();
+    formData.append('_method', 'put');
+
+    if (dirtyFields.avatar) formData.append('avatar', newAvatar);
+    formData.append('email', email);
+    formData.append('name', name);
+    setLoading(true);
+    axios
+      .post(`${config.URL}/users/${currentLogin.user.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${currentLogin.token}`,
+        },
+      })
+      .then((res) => {
+        currentLogin.user = res.data;
+        navigate('../');
+      });
   };
 
   return (
@@ -79,6 +116,7 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
               'Edit Profile'
             )}
           </button>
+          {loading ? <Loading /> : ''}
         </form>
       </div>
     </div>

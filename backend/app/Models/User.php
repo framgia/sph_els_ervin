@@ -13,6 +13,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    const DEFAULT_AVATAR = '/storage/avatars/default.png';
+
     const ADMIN_USER = 1;
     const REGULAR_USER = 0;
 

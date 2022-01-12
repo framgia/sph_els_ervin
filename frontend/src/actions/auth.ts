@@ -9,6 +9,7 @@ import {
 } from './types';
 
 import { config } from './config';
+import { User } from '.';
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     dispatch<RegisterUserAction>({
@@ -66,5 +67,11 @@ export const logoutUser = ({ user_id, token }: LogoutData) => {
         });
       });
     alert('Success!');
+  };
+};
+
+export const updateUser = (user: User) => {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: types.updateUser, payload: user });
   };
 };
