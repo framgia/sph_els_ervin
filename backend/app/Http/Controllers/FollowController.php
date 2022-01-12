@@ -27,6 +27,7 @@ class FollowController extends Controller
             ['follower_id', $data['follower']],
             ['following_id', $data['following']]
         ])->get();
+
         if (count($checkDuplicate) > 0) {
             return $this->errorResponse('Already following!', 500);
         }
@@ -57,7 +58,9 @@ class FollowController extends Controller
             ['follower_id', $data['follower']],
             ['following_id', $data['following']]
         ])->first();
+
         $follow->delete();
+
         return response($follow, 201);
     }
 }
