@@ -8,8 +8,9 @@ import { User } from './actions';
 import SplashPage from './pages/SplashPage';
 import RegistrationPage from './pages/Auth/RegistrationPage';
 import LoginPage from './pages/Auth/LoginPage';
-import ListUsersPage from './pages/Users/ListUsersPage';
+import ListUsersPage from './pages/Users';
 import ProfilePage from './pages/Users/ProfilePage';
+import EditProfilePage from './pages/Users/ProfilePage/edit';
 
 interface AppProps {
   SessionData?: {
@@ -42,7 +43,10 @@ function App(props: AppProps) {
         <Route path='/login' element={<LoginPage />} />
         <Route element={<AuthRoute />}>
           <Route path='/users'>
-            <Route path=':userId' element={<ProfilePage />} />
+            <Route path=':userId'>
+              <Route index element={<ProfilePage />} />
+              <Route path='edit' element={<EditProfilePage />} />
+            </Route>
             <Route index element={<ListUsersPage />} />
           </Route>
         </Route>

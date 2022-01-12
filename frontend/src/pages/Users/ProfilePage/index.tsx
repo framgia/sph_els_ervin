@@ -1,13 +1,17 @@
 import axios from 'axios';
-import { SessionData, User } from '../../actions';
+import { SessionData, User } from '../../../actions';
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
-import { config } from '../../actions/config';
-import Loading from '../../components/Loading';
-import { getFollowList, followUser, unfollowUser } from '../../actions/follows';
-import { FollowData } from '../../actions/types';
-import FollowButton from '../../components/FollowButton';
+import { config } from '../../../actions/config';
+import Loading from '../../../components/Loading';
+import {
+  getFollowList,
+  followUser,
+  unfollowUser,
+} from '../../../actions/follows';
+import { FollowData } from '../../../actions/types';
+import FollowButton from '../../../components/FollowButton';
 
 export interface IAppProps {
   followUser: Function;
