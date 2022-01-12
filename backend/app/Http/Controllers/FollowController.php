@@ -17,25 +17,24 @@ class FollowController extends Controller
 
     public function store()
     {
-        $data = request()->validate(
-            [
-                'follower' => ['required', 'integer'],
-                'following' => ['required', 'integer']
-            ]
-        );
+        $data = request()->validate([
+            'follower' => ['required', 'integer'],
+            'following' => ['required', 'integer']
+        ]);
 
         // Check if already following
-        $checkDuplicate = Follow::where('follower_id', $data['follower'])->where('following_id', $data['following'])->get();
+        $checkDuplicate = Follow::where([
+            ['follower_id', $data['follower']],
+            ['following_id', $data['following']]
+        ])->get();
         if (count($checkDuplicate) > 0) {
             return $this->errorResponse('Already following!', 500);
         }
 
-        $follow = Follow::create(
-            [
-                'follower_id' => $data['follower'],
-                'following_id' => $data['following']
-            ]
-        );
+        $follow = Follow::create([
+            'follower_id' => $data['follower'],
+            'following_id' => $data['following']
+        ]);
 
         return response($follow, 201);
     }
@@ -47,14 +46,17 @@ class FollowController extends Controller
 
     public function destroy()
     {
-        $data = request()->validate(
-            [
-                'follower' => ['required', 'integer'],
-                'following' => ['required', 'integer']
-            ]
-        );
+        $data = request()->validate([
+            'follower' => ['required', 'integer'],
+            'following' => ['required', 'integer']
+        ]);
 
-        $follow = Follow::all()->where('follower_id', $data['follower'])->where('following_id', $data['following'])->first();
+        // Cannot use $follow->query->first()->delete() because this returns true(or 1)
+        // and not the deleted user to update the followList state
+        $follow = Follow::where([
+            ['follower_id', $data['follower']],
+            ['following_id', $data['following']]
+        ])->first();
         $follow->delete();
         return response($follow, 201);
     }
