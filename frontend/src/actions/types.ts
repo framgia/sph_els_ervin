@@ -11,8 +11,10 @@ export enum types {
   userListRequest,
   userListSuccess,
   userListError,
+  userDataRequest,
+  userDataSuccess,
+  userDataError,
 }
-
 export interface RegistrationData {
   email: string;
   name: string;
@@ -61,11 +63,13 @@ export type User = {
   email_verified_at?: Date;
 };
 
+export interface SessionData {
+  token: string;
+  user: User;
+}
+
 export interface AuthenticationPayloadData {
-  SessionData: {
-    token: string;
-    user: User;
-  };
+  SessionData: SessionData;
 }
 
 export interface LogoutData {
@@ -78,7 +82,12 @@ export interface LogoutUserAction {
   payload?: LogoutData;
 }
 
-export interface UserTokenActions {
+export interface UserTokenAction {
   type: types;
   payload: LoginData | RegistrationData | LogoutData;
+}
+
+export interface UserDataAction {
+  type: types;
+  payload?: User;
 }

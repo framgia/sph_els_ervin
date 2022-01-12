@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { getUsersListReducer } from './users';
+import { getUsersListReducer, getUserDataReducer } from './users';
 import {
   registerUserReducer,
   loginUserReducer,
@@ -13,4 +13,5 @@ export const reducers = combineReducers({
   logout: logoutUserReducer,
   userToken: userTokenReducer,
   usersList: getUsersListReducer,
+  userData: getUserDataReducer,
 });

@@ -1,7 +1,14 @@
 import React from 'react';
 import './App.css';
 import { Navbar } from './layout/Navbar';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { User } from './actions';
 
@@ -9,26 +16,28 @@ import SplashPage from './pages/SplashPage';
 import RegistrationPage from './pages/Auth/RegistrationPage';
 import LoginPage from './pages/Auth/LoginPage';
 import ListUsersPage from './pages/Users/ListUsersPage';
+import ProfilePage from './pages/Users/ProfilePage';
 
 interface AppProps {
-  SessionData: {
+  SessionData?: {
     user: User;
     token: string;
   };
 }
 
 function App(props: AppProps) {
-  // Is changed to an AuthRoute component in the next PR
-  const checkAuthStatus = () => {
-    return !props.SessionData.user;
+  // Auth Navigation
+  const userAuthenticationStatus = () => {
+    return props.SessionData;
   };
 
-  const redirectToAuth = () => {
-    return <Navigate to='/' replace={true} />;
-  };
-
-  const redirectToAuthIfNotLoggedIn = (component: JSX.Element): JSX.Element => {
-    return checkAuthStatus() ? redirectToAuth() : component;
+  const AuthRoute = (): JSX.Element => {
+    let location = useLocation();
+    return !userAuthenticationStatus() ? (
+      <Navigate to='/login' replace={true} state={{ from: location }} />
+    ) : (
+      <Outlet />
+    );
   };
 
   return (
@@ -36,18 +45,14 @@ function App(props: AppProps) {
       <Navbar />
       <Routes>
         <Route path='/' element={<SplashPage />} />
-        <Route
-          path='/register'
-          element={redirectToAuthIfNotLoggedIn(<RegistrationPage />)}
-        />
-        <Route
-          path='/login'
-          element={redirectToAuthIfNotLoggedIn(<LoginPage />)}
-        />
-        <Route
-          path='/users'
-          element={redirectToAuthIfNotLoggedIn(<ListUsersPage />)}
-        />
+        <Route path='/register' element={<RegistrationPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route element={<AuthRoute />}>
+          <Route path='/users'>
+            <Route path=':userId' element={<ProfilePage />} />
+            <Route index element={<ListUsersPage />} />
+          </Route>
+        </Route>
       </Routes>
     </div>
   );
