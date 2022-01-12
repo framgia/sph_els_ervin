@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { RegistrationData } from '../../actions/types';
 import { registerUser } from '../../actions/auth';
