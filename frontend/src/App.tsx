@@ -12,7 +12,7 @@ import ListUsersPage from './pages/Users';
 import ProfilePage from './pages/Users/ProfilePage';
 import EditProfilePage from './pages/Users/ProfilePage/edit';
 import CategoriesPage from './pages/Categories';
-import CategoryDetailPage from './pages/Categories/CategoryDetailPage';
+import Quiz from './pages/Categories/Quiz';
 
 interface AppProps {
   SessionData?: {
@@ -56,7 +56,7 @@ function App(props: AppProps) {
           <Route path='/categories'>
             <Route index element={<CategoriesPage />} />
             <Route path=':categorySlug'>
-              <Route index element={<CategoryDetailPage />} />
+              <Route index element={<Quiz />} />
             </Route>
           </Route>
         </Route>
