@@ -26,6 +26,38 @@ export enum types {
   getFollowListSuccess,
   getFollowListError,
 }
+
+// DataTypes
+export type User = {
+  avatar: string;
+  email: string;
+  id: number;
+  is_admin: number;
+  name: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+  email_verified_at?: Date;
+};
+
+export interface FollowData {
+  id: number;
+  follower_id: number;
+  following_id: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Category {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Authentication
 export interface RegistrationData {
   email: string;
   name: string;
@@ -62,18 +94,6 @@ export interface UsersListAction {
   payload?: UsersListData;
 }
 
-export type User = {
-  avatar: string;
-  email: string;
-  id: number;
-  is_admin: number;
-  name: string;
-  created_at: Date;
-  updated_at: Date;
-  deleted_at?: Date;
-  email_verified_at?: Date;
-};
-
 export interface SessionData {
   token: string;
   user: User;
@@ -98,11 +118,7 @@ export interface UserTokenAction {
   payload: LoginData | RegistrationData | LogoutData;
 }
 
-export interface UserDataAction {
-  type: types;
-  payload?: User;
-}
-
+// Follows
 export interface FollowRequestData {
   follower: number;
   following: number;
@@ -116,14 +132,6 @@ export interface FollowUserAction {
 export interface UnfollowUserAction {
   type: types;
   payload?: FollowData;
-}
-
-export interface FollowData {
-  id: number;
-  follower_id: number;
-  following_id: number;
-  created_at: Date;
-  updated_at: Date;
 }
 
 export interface GetFollowListAction {

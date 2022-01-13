@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Category extends Model
 {
     use HasFactory, SoftDeletes;
+    const HIDDEN = 0;
+    const VISIBLE = 1;
 
     public function getRouteKeyName()
     {
