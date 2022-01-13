@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->text('title');
             $table->text('slug');
             $table->string('description');
+            $table->integer('visibility')->default(Category::VISIBLE);
             $table->timestamps();
             $table->softDeletes();
         });

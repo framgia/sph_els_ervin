@@ -11,6 +11,8 @@ import LoginPage from './pages/Auth/LoginPage';
 import ListUsersPage from './pages/Users';
 import ProfilePage from './pages/Users/ProfilePage';
 import EditProfilePage from './pages/Users/ProfilePage/edit';
+import CategoriesPage from './pages/Categories';
+import CategoryDetailPage from './pages/Categories/CategoryDetailPage';
 
 interface AppProps {
   SessionData?: {
@@ -41,6 +43,8 @@ function App(props: AppProps) {
         <Route path='/' element={<SplashPage />} />
         <Route path='/register' element={<RegistrationPage />} />
         <Route path='/login' element={<LoginPage />} />
+
+        {/* Forces a redirect to the login page if unauthenticated */}
         <Route element={<AuthRoute />}>
           <Route path='/users'>
             <Route path=':userId'>
@@ -48,6 +52,12 @@ function App(props: AppProps) {
               <Route path='edit' element={<EditProfilePage />} />
             </Route>
             <Route index element={<ListUsersPage />} />
+          </Route>
+          <Route path='/categories'>
+            <Route index element={<CategoriesPage />} />
+            <Route path=':categorySlug'>
+              <Route index element={<CategoryDetailPage />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
