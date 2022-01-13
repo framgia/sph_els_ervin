@@ -33,9 +33,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::resource('categories', CategoryController::class);
     Route::resource('categories.questions', QuestionController::class);
-    Route::resource('follows', FollowController::class)->only('index', 'store', 'show');
     Route::resource('results', ResultController::class);
     Route::resource('progress', UserProgressController::class);
+    Route::resource('follows', FollowController::class)->only('index', 'store');
+    Route::get('follows/{user}/following', [FollowController::class, 'following']);
+    Route::get('follows/{user}/followers', [FollowController::class, 'followers']);
     Route::put('users/{user}', [UserController::class, 'update']);
     Route::delete('follows', [FollowController::class, 'destroy']);
 });

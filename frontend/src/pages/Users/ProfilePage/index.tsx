@@ -25,11 +25,14 @@ const ProfilePage = (props: IAppProps) => {
   const { userId } = useParams();
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
-      getUser(parseInt(userId));
+      getUser();
+      setFollowCounts();
       if (props.currentLogin) {
         const {
           token,
@@ -41,10 +44,10 @@ const ProfilePage = (props: IAppProps) => {
     }
   }, []);
 
-  const getUser = async (id: number) => {
+  const getUser = async () => {
     if (!props.currentLogin) return;
     await axios
-      .get(`${config.URL}/users/${id}`, {
+      .get(`${config.URL}/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${props.currentLogin.token}`,
         },
@@ -59,6 +62,31 @@ const ProfilePage = (props: IAppProps) => {
     return props.followsList.map((followData: FollowData) => {
       return followData.following_id;
     });
+  };
+
+  const setFollowCounts = () => {
+    setFollowingCount();
+    setFollowersCount();
+  };
+
+  const setFollowersCount = async () => {
+    await axios
+      .get(`${config.URL}/follows/${userId}/followers`, {
+        headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
+      })
+      .then((res: any) => {
+        setFollowers(res.data.length);
+      });
+  };
+
+  const setFollowingCount = async () => {
+    await axios
+      .get(`${config.URL}/follows/${userId}/following`, {
+        headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
+      })
+      .then((res: any) => {
+        setFollowing(res.data.length);
+      });
   };
 
   const showProfile = () => {
@@ -93,6 +121,8 @@ const ProfilePage = (props: IAppProps) => {
               </Link>
             ) : (
               <FollowButton
+                followers={followers}
+                setFollowers={setFollowers}
                 userId={id}
                 className='px-10'
                 following={getFollowingIds().includes(user.id)}
@@ -110,11 +140,11 @@ const ProfilePage = (props: IAppProps) => {
       <>
         <div className='mt-2'>
           <p>Followers</p>
-          <p>12</p>
+          {followers}
         </div>
         <div className='mt-2'>
           <p>Following</p>
-          <p>12</p>
+          {following}
         </div>
       </>
     );
