@@ -32,17 +32,15 @@ const CategoriesPage = (props: Props) => {
   const showCategories = () => {
     return categories.map(({ title, description, slug }: Category) => {
       return (
-        <>
-          <div className='card shadow-lg lg:card-side'>
-            <div className='card-body'>
-              <h2 className='card-title text-left'>{title}</h2>
-              <p className='text-left h-12 max-h-12'>{description}</p>
-              <Link className='mt-5 btn btn-info w-1/4' to={`${slug}`}>
-                Start
-              </Link>
-            </div>
+        <div className='card shadow-lg lg:card-side'>
+          <div className='card-body'>
+            <h2 className='card-title text-left'>{title}</h2>
+            <p className='text-left h-12 max-h-12'>{description}</p>
+            <Link className='mt-5 btn btn-info w-1/4' to={slug}>
+              Start
+            </Link>
           </div>
-        </>
+        </div>
       );
     });
   };

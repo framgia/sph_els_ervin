@@ -10,15 +10,6 @@ interface Props {
 }
 
 const CategoryDetailPage = (props: Props) => {
-  const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState([]);
-
-  useEffect(() => {}, []);
-
-  const getCategory = async () => {
-    //todo
-  };
-
   return (
     <div className='container mx-auto'>
       <div className='mt-4 text-4xl left'>Categories</div>
