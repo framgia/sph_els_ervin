@@ -24,10 +24,13 @@ class ChoiceController extends Controller
     public function choices(Category $category)
     {
         $choices = array();
+
         foreach ($category->questions as $question) {
             $choices[] = $question->choices;
         }
+
         $collection = collect($choices);
+
         return $this->showAll($collection);
     }
 

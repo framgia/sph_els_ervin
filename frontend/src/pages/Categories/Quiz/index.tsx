@@ -43,62 +43,57 @@ const QuizPage = ({ currentLogin }: Props) => {
   };
 
   const getCategory = async () => {
-    if (categorySlug) {
-      await axios
-        .get(`${config.URL}/categories/${categorySlug}`, {
-          headers: {
-            Authorization: `Bearer ${currentLogin.token}`,
-          },
-        })
-        .then((res) => {
-          setCategory(res.data);
-        });
-    }
+    if (!categorySlug) return;
+    await axios
+      .get(`${config.URL}/categories/${categorySlug}`, {
+        headers: {
+          Authorization: `Bearer ${currentLogin.token}`,
+        },
+      })
+      .then((res) => {
+        setCategory(res.data);
+      });
   };
 
   const getQuestions = async () => {
-    if (categorySlug) {
-      await axios
-        .get<Question[]>(`${config.URL}/categories/${categorySlug}/questions`, {
-          headers: {
-            Authorization: `Bearer ${currentLogin.token}`,
-          },
-        })
-        .then((res) => {
-          setQuestions(res.data);
-        });
-    }
+    if (!categorySlug) return;
+    await axios
+      .get<Question[]>(`${config.URL}/categories/${categorySlug}/questions`, {
+        headers: {
+          Authorization: `Bearer ${currentLogin.token}`,
+        },
+      })
+      .then((res) => {
+        setQuestions(res.data);
+      });
   };
 
   const getChoices = async () => {
-    if (categorySlug) {
-      await axios
-        .get(`${config.URL}/categories/${categorySlug}/choices`, {
-          headers: {
-            Authorization: `Bearer ${currentLogin.token}`,
-          },
-        })
-        .then((res) => {
-          setChoices(res.data);
-        });
-    }
+    if (!categorySlug) return;
+    await axios
+      .get(`${config.URL}/categories/${categorySlug}/choices`, {
+        headers: {
+          Authorization: `Bearer ${currentLogin.token}`,
+        },
+      })
+      .then((res) => {
+        setChoices(res.data);
+      });
   };
 
   const renderChoice = () => {
     if (!choices) return;
     return choices[page].map((choice: Choice) => {
-      return (
-        <label className='cursor-pointer label'>
-          <button
-            className='btn btn-info w-[32rem]'
-            onClick={() => {
-              nextPage(choice.id);
-            }}
-          >
-            {choice.choice}
-          </button>
-        </label>
-      );
+      <label className='cursor-pointer label'>
+        <button
+          className='btn btn-info w-[32rem]'
+          onClick={() => {
+            nextPage(choice.id);
+          }}
+        >
+          {choice.choice}
+        </button>
+      </label>;
     });
   };
 
@@ -130,9 +125,9 @@ const QuizPage = ({ currentLogin }: Props) => {
             />
           </figure>
           <div className='card-body'>
-            <h3 className='text-right mr-12'>{`${page + 1} of ${
-              questions.length
-            }`}</h3>
+            <h3 className='text-right mr-12'>
+              {`${page + 1} of ${questions.length}`}
+            </h3>
             <h2 className='card-title'>{questions[page].question}</h2>
             <div className='form-control mx-auto'>{renderChoice()}</div>
             <div className='p-6 w-2/3 mx-auto space-y-2 artboard'>
@@ -149,7 +144,6 @@ const QuizPage = ({ currentLogin }: Props) => {
   };
 
   const renderResultsScreen = () => {
-    console.log(answers);
     return <div>Results Page</div>;
   };
 
