@@ -36,7 +36,6 @@ const QuizPage = ({ currentLogin }: Props) => {
     let oldData: RecordedQuizData;
     if (!categorySlug) return;
     if (localStorage.getItem(categorySlug)) {
-      console.log(localStorage.getItem(categorySlug));
       oldData = JSON.parse(localStorage.getItem(categorySlug) || '');
       setPage(oldData.page);
       setAnswers(oldData.answers);

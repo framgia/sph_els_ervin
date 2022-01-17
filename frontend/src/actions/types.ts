@@ -74,6 +74,24 @@ export interface Choice {
   is_correct: boolean;
 }
 
+export interface UserProgress {
+  id: number;
+  user_id: number;
+  category_id: number;
+  status: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Result {
+  id: number;
+  category_id: number;
+  question_id: number;
+  created_at: Date;
+  updated_at: Date;
+  user_choice_id: number;
+  is_correct: boolean;
+}
 // Authentication
 export interface RegistrationData {
   email: string;
