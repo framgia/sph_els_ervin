@@ -24,6 +24,6 @@ class Category extends Model
 
     public function user_progress()
     {
-        return $this->hasMany(UserProgress::class);
+        return $this->belongsToMany(UserProgress::class);
     }
 }

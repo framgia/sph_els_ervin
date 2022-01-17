@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserProgress::class);
     }
+
+    public function get_user_progress_by_category($id)
+    {
+        return $this->user_progess()->where('category_id', $id);
+    }
 }
