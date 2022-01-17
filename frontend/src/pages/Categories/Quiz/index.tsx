@@ -34,8 +34,10 @@ const QuizPage = ({ currentLogin }: Props) => {
     await getQuestions();
     await getChoices();
     let oldData: RecordedQuizData;
-    if (localStorage.getItem('QuizData')) {
-      oldData = JSON.parse(localStorage.getItem('QuizData') || '');
+    if (!categorySlug) return;
+    if (localStorage.getItem(categorySlug)) {
+      console.log(localStorage.getItem(categorySlug));
+      oldData = JSON.parse(localStorage.getItem(categorySlug) || '');
       setPage(oldData.page);
       setAnswers(oldData.answers);
     }
@@ -84,31 +86,39 @@ const QuizPage = ({ currentLogin }: Props) => {
   const renderChoice = () => {
     if (!choices) return;
     return choices[page].map((choice: Choice) => {
-      <label className='cursor-pointer label'>
-        <button
-          className='btn btn-info w-[32rem]'
-          onClick={() => {
-            nextPage(choice.id);
-          }}
-        >
-          {choice.choice}
-        </button>
-      </label>;
+      return (
+        <label className='cursor-pointer label'>
+          <button
+            className='btn btn-info w-[32rem]'
+            onClick={() => {
+              nextPage(choice.id);
+            }}
+          >
+            {choice.choice}
+          </button>
+        </label>
+      );
     });
   };
 
+  useEffect(() => {
+    if (!categorySlug) return;
+    if (loading) return;
+    localStorage.setItem(
+      categorySlug,
+      JSON.stringify({
+        answers,
+        page: page,
+      })
+    );
+  }, [page]);
+
   const nextPage = (choiceId: number) => {
+    if (!categorySlug) return;
     const temp: number[] = [...answers]; // copies current state
     temp[page] = choiceId; // changes the specific section in the state
     setAnswers(temp); // update state with changed index
     setPage(page + 1);
-    localStorage.setItem(
-      'QuizData',
-      JSON.stringify({
-        answers,
-        page,
-      })
-    );
   };
 
   const renderQuestion = () => {
@@ -120,7 +130,7 @@ const QuizPage = ({ currentLogin }: Props) => {
         <div className='card lg:card-side card-bordered'>
           <figure>
             <img
-              className='object-fit'
+              className='object-fit max-h-64 max-w-64'
               src={config.IMG_URL + questions[page].image}
             />
           </figure>
