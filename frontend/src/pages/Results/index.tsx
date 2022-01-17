@@ -1,4 +1,4 @@
-import { Category, Choice, Question } from '../../actions';
+import { Category, Choice, Question, QuizStatus } from '../../actions';
 import { useEffect, useState } from 'react';
 import { config } from '../../actions/config';
 import { SessionData, UserProgress, Result } from '../../actions/types';
@@ -27,7 +27,7 @@ const ResultsPage = ({
 
   useEffect(() => {
     checkQuizStatus().then((res) => {
-      res.status === -1 && updateStatus(res.id);
+      res.status === QuizStatus.UNFINISHED && updateStatus(res.id);
     });
   }, [score]);
 
@@ -73,8 +73,8 @@ const ResultsPage = ({
       });
   };
 
-  const getUsersAnswer = (index: number): string => {
-    if (!quizData) return '';
+  const getUsersAnswer = (index: number): string | undefined => {
+    if (!quizData) return;
     return choices[index].filter(
       (result) => result.id === quizData[index].user_choice_id
     )[0].choice;
@@ -94,21 +94,19 @@ const ResultsPage = ({
   }, [quizData]);
 
   const getTotalScore = () => {
-    if (!quizData) return false;
+    if (!quizData) return;
     setScore(quizData.filter((result) => result.is_correct).length);
   };
 
   const renderResultsData = () => {
-    return questions.map((question: Question, index) => {
-      return (
-        <tr>
-          <td>{getAnswerResult(index) ? 'correct' : 'wrong'}</td>
-          <td>{question.question}</td>
-          <td>{getUsersAnswer(index)}</td>
-          <td>{getCorrectAnswer(index).choice}</td>
-        </tr>
-      );
-    });
+    return questions.map((question: Question, index) => (
+      <tr>
+        <td>{getAnswerResult(index) ? 'correct' : 'wrong'}</td>
+        <td>{question.question}</td>
+        <td>{getUsersAnswer(index)}</td>
+        <td>{getCorrectAnswer(index).choice}</td>
+      </tr>
+    ));
   };
 
   return (

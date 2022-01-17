@@ -173,3 +173,8 @@ export interface GetFollowListAction {
   type: types;
   payload?: FollowData[];
 }
+
+export const QuizStatus = {
+  UNFINISHED: -1,
+  FINISHED: 1,
+};
