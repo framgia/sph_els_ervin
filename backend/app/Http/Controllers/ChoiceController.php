@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Choice;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class ChoiceController extends Controller
@@ -12,9 +14,24 @@ class ChoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    // Can't remove the category parameter due to how the url works, might be wrong
+    public function index(Category $category, Question $question)
     {
-        //
+        return $this->showAll($question->choices);
+    }
+
+    public function choices(Category $category)
+    {
+        $choices = array();
+
+        foreach ($category->questions as $question) {
+            $choices[] = $question->choices;
+        }
+
+        $collection = collect($choices);
+
+        return $this->showAll($collection);
     }
 
     /**

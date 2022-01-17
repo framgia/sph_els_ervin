@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ResultController;
@@ -31,10 +32,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::resource('categories/{category:slug}/questions', QuestionController::class);
+    Route::resource('categories/{category:slug}/questions/{question:id}/choices', ChoiceController::class);
+    Route::get('categories/{category:slug}/choices', [ChoiceController::class, 'choices']);
     Route::resource('categories', CategoryController::class);
-    Route::resource('categories.questions', QuestionController::class);
-    Route::resource('results', ResultController::class);
-    Route::resource('progress', UserProgressController::class);
     Route::resource('follows', FollowController::class)->only('index', 'store');
     Route::get('follows/{user}/following', [FollowController::class, 'following']);
     Route::get('follows/{user}/followers', [FollowController::class, 'followers']);

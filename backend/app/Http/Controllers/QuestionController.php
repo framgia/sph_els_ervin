@@ -17,9 +17,8 @@ class QuestionController extends Controller
      */
     public function index(Category $category)
     {
-        $question = Question::with(['category' => function ($query) use ($category) {
-            $query->where('id', $category->id);
-        }])->get();
+        $question = Question::where('category_id', $category->id)->with(['category'])->get();
+
         return $this->showAll($question);
     }
 

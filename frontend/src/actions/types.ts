@@ -57,6 +57,23 @@ export interface Category {
   updated_at: Date;
 }
 
+export interface Question {
+  id: number;
+  category_id: number;
+  question: string;
+  image: string;
+  slug: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Choice {
+  id: number;
+  question_id: number;
+  choice: string;
+  is_correct: boolean;
+}
+
 // Authentication
 export interface RegistrationData {
   email: string;
