@@ -54,10 +54,6 @@ class ResultController extends Controller
         }
 
         return ($results);
-
-        //$result = Result::create($data);
-
-        //return $this->showOne($result);
     }
 
     /**
