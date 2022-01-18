@@ -86,7 +86,7 @@ const AddWordPage = ({ currentLogin: { user, token } }: Props) => {
     keyName: 'key',
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     const questionsData = new FormData();
     questionsData.append('image', data.question_image[0]);
     questionsData.append('question', data.question);
@@ -98,10 +98,9 @@ const AddWordPage = ({ currentLogin: { user, token } }: Props) => {
       };
     });
 
-    postQuestion(questionsData).then((res) => {
-      postChoices(choicesData, res.id).then((res) => {
-        <Navigate to='/admin/categories' />;
-      });
+    const question = await postQuestion(questionsData);
+    postChoices(choicesData, question.id).then((res) => {
+      <Navigate to='/admin/categories' />;
     });
   };
 

@@ -7,6 +7,7 @@ import { SessionData } from '../../../actions/types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import API from '../../../api/baseAPI';
+import CategoryAPI from '../../../api/CategoryAPI';
 
 interface Props {
   currentLogin: SessionData;
@@ -21,13 +22,13 @@ const CategoriesEditPage = ({ currentLogin: { user, token } }: Props) => {
   }, []);
 
   const getCategories = () => {
-    API.get<Category[]>('/categories').then((res) => {
+    CategoryAPI.index().then((res) => {
       setCategories(res.data);
     });
   };
 
   const deleteCategory = (slug: string) => {
-    API.delete(`/categories/${slug}`).then((res) => {
+    CategoryAPI.delete(slug).then((res) => {
       setCategories(categories.filter((category) => category.slug !== slug));
     });
   };
@@ -35,30 +36,28 @@ const CategoriesEditPage = ({ currentLogin: { user, token } }: Props) => {
   const renderTableData = () => {
     if (!categories) return;
 
-    return categories.map(({ title, description, slug }) => {
-      return (
-        <tr>
-          <td>{title}</td>
-          <td>{description}</td>
-          <td>
-            <div className='flex gap-x-2 align-middle justify-center'>
-              <Link to={slug} className='btn btn-info'>
-                Add Word
-              </Link>
-              <Link to={`edit/${slug}`} className='btn btn-info'>
-                Edit
-              </Link>
-              <button
-                onClick={() => deleteCategory(slug)}
-                className='btn bg-red-600'
-              >
-                Delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      );
-    });
+    return categories.map(({ title, description, slug }) => (
+      <tr>
+        <td>{title}</td>
+        <td>{description}</td>
+        <td>
+          <div className='flex gap-x-2 align-middle justify-center'>
+            <Link to={slug} className='btn btn-info'>
+              Add Word
+            </Link>
+            <Link to={`edit/${slug}`} className='btn btn-info'>
+              Edit
+            </Link>
+            <button
+              onClick={() => deleteCategory(slug)}
+              className='btn bg-red-600'
+            >
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    ));
   };
 
   return (

@@ -2,12 +2,10 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import FormError from '../../../components/FormError';
 import { useEffect } from 'react';
-import { Navigate, useParams, useNavigate } from 'react-router-dom';
-import { config } from '../../../actions/config';
-import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import { SessionData, Category } from '../../../actions/types';
 import { connect } from 'react-redux';
-import API from '../../../api/baseAPI';
+import CategoryAPI from '../../../api/CategoryAPI';
 
 interface FormData {
   title: string;
@@ -29,11 +27,11 @@ const AddEditCategory = ({ currentLogin: { user, token } }: Props) => {
   } = useForm();
   const onSubmit = (data: FormData) => {
     if (categorySlug) {
-      API.put(`/categories/${categorySlug}`, data).then((res) => {
-        navigate('/admin/categories');
-      });
+      CategoryAPI.update(data, categorySlug).then((res) =>
+        navigate('/admin/categories')
+      );
     } else {
-      API.post('/categories', data).then((res) => {
+      CategoryAPI.save(data).then((res) => {
         navigate('/admin/categories');
       });
     }
@@ -41,7 +39,7 @@ const AddEditCategory = ({ currentLogin: { user, token } }: Props) => {
 
   useEffect(() => {
     if (!categorySlug) return;
-    API.get<Category>(`/categories/${categorySlug}`).then((res) => {
+    CategoryAPI.get(categorySlug).then((res) => {
       reset(res.data);
     });
   }, [reset]);
