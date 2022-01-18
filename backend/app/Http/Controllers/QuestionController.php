@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Question;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class QuestionController extends Controller
 {
@@ -40,9 +41,10 @@ class QuestionController extends Controller
      */
     public function store(Category $category, Request $request)
     {
+
         $question_data = $request->validate([
             'question' => ['required', 'string'],
-            'image' => ['required', 'file'],
+            'image' => ['required', 'file']
         ]);
 
         $question = Question::create([
@@ -87,16 +89,16 @@ class QuestionController extends Controller
     public function update(Request $request, Question $question)
     {
         $question->fill($request->validate([
-            'question' => ['string'],
-            'image' => ['file'],
+            'question' => ['string', Rule::unique('questions', 'question')->ignore($question->id)],
+            'image' => ['image'],
         ]));
 
         if ($question->isClean()) {
             return $this->errorResponse('Please specify new data', 422);
         }
 
-        if ($question['image']->isDirty()) {
-            $request->file('image')->store($this::STORAGE_PATH);
+        if ($request->has('image')) {
+            $question['image'] = '/storage/' . $request->file('image')->store($this::STORAGE_PATH, 'images');
         }
 
         $question->save();

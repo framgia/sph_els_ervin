@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
+    const ADMIN_ABILITY = 'admin';
+
     public function register(Request $request)
     {
         // Validate Form Data
@@ -29,7 +31,13 @@ class AuthController extends Controller
             'avatar' => Storage::url('public/avatars/' . 'default.png'), //Default Image
         ]);
 
-        $token = $user->createToken('els_token')->plainTextToken;
+        $abilities = [];
+
+        if ($user->is_admin) {
+            $abilities[] = $this::ADMIN_ABILITY;
+        }
+
+        $token = $user->createToken('els_token', $abilities)->plainTextToken;
 
         $response = [
             'user' => $user,

@@ -40,9 +40,20 @@ class ChoiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Category $category, Question $question, Request $request)
     {
-        //
+        $data = $request->validate([
+            'choices' => ['array', 'required'],
+            'choices.*.is_correct' => ['required', 'boolean'],
+            'choices.*.choice' => ['required', 'string', 'distinct']
+        ])['choices']; // Take choices out of brackets
+        foreach ($data as $index => $choice) {
+            $data[$index]["question_id"] = $question->id;
+        }
+
+        $choices = Choice::create($data);
+
+        return $choices;
     }
 
     /**
@@ -51,9 +62,11 @@ class ChoiceController extends Controller
      * @param  \App\Models\Choice  $choice
      * @return \Illuminate\Http\Response
      */
-    public function show(Choice $choice)
+
+    // Same as above due to the other dynamic fields these other parameters are required
+    public function show(Category $category, Question $question, Choice $choice)
     {
-        //
+        return $choice;
     }
 
     /**
@@ -63,9 +76,16 @@ class ChoiceController extends Controller
      * @param  \App\Models\Choice  $choice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Choice $choice)
+    public function update(Category $category, Question $question, Choice $choice, Request $request)
     {
-        //
+        $choice->fill($request->validate([
+            'choice' => 'string',
+            'is_correct' => 'boolean'
+        ]));
+
+        $choice->save();
+
+        return $choice;
     }
 
     /**
@@ -74,8 +94,10 @@ class ChoiceController extends Controller
      * @param  \App\Models\Choice  $choice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Choice $choice)
+    public function destroy(Category $category, Question $question, Choice $choice)
     {
-        //
+        $choice->delete();
+
+        return $choice;
     }
 }
