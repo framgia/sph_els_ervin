@@ -6,12 +6,14 @@ import {
   SessionData,
   Choice,
   UserProgress,
+  QuizStatus,
 } from '../../../actions';
 import axios from 'axios';
 import { config } from '../../../actions/config';
 import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import ResultsPage from '../../Results';
+import API from '../../../api/baseAPI';
 
 interface Props {
   currentLogin: SessionData;
@@ -44,31 +46,15 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
 
   const checkForQuizData = (questions: Question[]) => {
     if (!categorySlug) return;
-    axios
-      .get<UserProgress>(
-        `${config.URL}/users/${user.id}/${categorySlug}/progress`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
+    API.get<UserProgress>(`/users/${user.id}/${categorySlug}/progress`).then(
+      (res) => {
         if (!res.data) {
-          axios
-            .post<UserProgress>(
-              `${config.URL}/users/${user.id}/${categorySlug}/progress`,
-              {},
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            )
-            .then((res) => setUserProgress(res.data));
+          API.post<UserProgress>(
+            `/users/${user.id}/${categorySlug}/progress`
+          ).then((res) => setUserProgress(res.data));
         } else {
           setUserProgress(res.data);
-          if (res.data.status === 1) {
+          if (res.data.status !== QuizStatus.UNFINISHED) {
             setPage(questions?.length || 0);
           } else {
             let oldData: RecordedQuizData;
@@ -80,49 +66,34 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
           }
         }
         setLoading(false);
-      });
+      }
+    );
   };
 
   const getCategory = async () => {
     if (!categorySlug) return;
-    return await axios
-      .get(`${config.URL}/categories/${categorySlug}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setCategory(res.data);
-        return res.data;
-      });
+    return await API.get(`/categories/${categorySlug}`).then((res) => {
+      setCategory(res.data);
+      return res.data;
+    });
   };
 
   const getQuestions = async () => {
     if (!categorySlug) return;
-    return await axios
-      .get<Question[]>(`${config.URL}/categories/${categorySlug}/questions`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setQuestions(res.data);
-        return res.data;
-      });
+    return await API.get<Question[]>(
+      `/categories/${categorySlug}/questions`
+    ).then((res) => {
+      setQuestions(res.data);
+      return res.data;
+    });
   };
 
   const getChoices = async () => {
     if (!categorySlug) return;
-    return await axios
-      .get(`${config.URL}/categories/${categorySlug}/choices`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setChoices(res.data);
-        return res.data;
-      });
+    return await API.get(`/categories/${categorySlug}/choices`).then((res) => {
+      setChoices(res.data);
+      return res.data;
+    });
   };
 
   const renderChoice = () => {
@@ -157,14 +128,9 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
 
     if (page !== questions?.length) return;
     setLoading(true);
-    axios.put<UserProgress>(
-      `${config.URL}/users/${user.id}/${categorySlug}/progress/${userProgress.id}`,
-      { status: 1 },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    API.put<UserProgress>(
+      `/users/${user.id}/${categorySlug}/progress/${userProgress.id}`,
+      { status: 1 }
     );
 
     let resultData = {
@@ -177,15 +143,9 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
       ),
     };
 
-    axios
-      .post(
-        `${config.URL}/users/${user.id}/${categorySlug}/results`,
-        resultData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => setLoading(false));
+    API.post(`/users/${user.id}/${categorySlug}/results`, resultData).then(
+      (res) => setLoading(false)
+    );
   }, [page]);
 
   const nextPage = (choice: Choice) => {

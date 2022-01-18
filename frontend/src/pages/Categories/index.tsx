@@ -11,6 +11,7 @@ import {
   Choice,
   QuizStatus,
 } from '../../actions/types';
+import API from '../../api/baseAPI';
 
 interface Props {
   currentLogin: SessionData;
@@ -28,18 +29,11 @@ const CategoriesPage = (props: Props) => {
   }, []);
 
   const getAllStatus = async () => {
-    axios
-      .get<UserProgress[]>(
-        `${config.URL}/users/${props.currentLogin.user.id}/progress`,
-        {
-          headers: {
-            Authorization: `Bearer ${props.currentLogin.token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setStatus(res.data);
-      });
+    API.get<UserProgress[]>(
+      `/users/${props.currentLogin.user.id}/progress`
+    ).then((res) => {
+      setStatus(res.data);
+    });
   };
 
   const getStatus = (category: number) => {
@@ -61,16 +55,10 @@ const CategoriesPage = (props: Props) => {
   };
 
   const getCategories = async () => {
-    axios
-      .get(`${config.URL}/categories`, {
-        headers: {
-          Authorization: `Bearer ${props.currentLogin.token}`,
-        },
-      })
-      .then((res) => {
-        setCategories(res.data);
-        setLoading(false);
-      });
+    API.get<Category[]>('/categories').then((res) => {
+      setCategories(res.data);
+      setLoading(false);
+    });
   };
 
   const showCategories = () => {

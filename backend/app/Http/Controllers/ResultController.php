@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class ResultController extends Controller
 {
@@ -43,17 +44,21 @@ class ResultController extends Controller
             'results.*' => ['required', 'boolean']
         ]);
 
-        $results = [];
-        for ($i = 0; $i < count($request->get('questions')); $i++) {
-            $result['user_progress_id'] = $data['user_progress_id'];
-            $result['category_id'] = $category->id;
-            $result['question_id'] = $data['questions'][$i];
-            $result['user_choice_id'] = $data['answers'][$i];
-            $result['is_correct'] = $data['results'][$i];
-            $results[] = Result::create($result);
-        }
+        $questions = collect($request->only('questions')['questions']);
 
-        return ($results);
+        $data = $questions->map(
+            function ($result, $key) use ($request, $category) {
+                return Result::create([
+                    'user_progress_id' => $request->get('user_progress_id'),
+                    'category_id' => $category->id,
+                    'question_id' => $result,
+                    'user_choice_id' => $request->input('answers.' . $key),
+                    'is_correct' => $request->input('results.' . $key)
+                ]);
+            }
+        );
+
+        return ($data);
     }
 
     /**

@@ -66,6 +66,7 @@ class UserProgressController extends Controller
         ]));
 
         $progress->save();
+
         return $progress;
     }
 
