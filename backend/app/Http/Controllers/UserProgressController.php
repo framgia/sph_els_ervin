@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\User;
 use App\Models\UserProgress;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,19 @@ class UserProgressController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user, Category $category)
     {
-        //
+        $progress = UserProgress::where([
+            ['user_id', $user->id],
+            ['category_id', $category->id]
+        ])->first();
+
+        return $progress;
+    }
+
+    public function fullStatus(User $user)
+    {
+        return $this->showAll(UserProgress::where('user_id', $user->id)->get());
     }
 
     /**
@@ -23,9 +35,10 @@ class UserProgressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(User $user, Category $category, Request $request)
     {
-        //
+        $progress = UserProgress::create(['user_id' => $user->id, 'category_id' => $category->id]);
+        return $progress;
     }
 
     /**
@@ -34,9 +47,9 @@ class UserProgressController extends Controller
      * @param  \App\Models\UserProgress  $userProgress
      * @return \Illuminate\Http\Response
      */
-    public function show(UserProgress $userProgress)
+    public function show(User $user, Category $category, UserProgress $progress)
     {
-        //
+        return $this->showOne($progress);
     }
 
     /**
@@ -46,9 +59,15 @@ class UserProgressController extends Controller
      * @param  \App\Models\UserProgress  $userProgress
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserProgress $userProgress)
+    public function update(User $user, Category $category, UserProgress $progress, Request $request)
     {
-        //
+        $progress->fill($request->validate([
+            'status' => ['integer']
+        ]));
+
+        $progress->save();
+
+        return $progress;
     }
 
     /**

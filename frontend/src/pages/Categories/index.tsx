@@ -5,6 +5,13 @@ import axios from 'axios';
 import { config } from '../../actions/config';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
+import {
+  UserProgress,
+  Question,
+  Choice,
+  QuizStatus,
+} from '../../actions/types';
+import API from '../../api/baseAPI';
 
 interface Props {
   currentLogin: SessionData;
@@ -14,10 +21,27 @@ const CategoriesPage = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState('');
+  const [status, setStatus] = useState<UserProgress[]>([]);
 
   useEffect(() => {
     getCategories();
+    getAllStatus();
   }, []);
+
+  const getAllStatus = async () => {
+    API.get<UserProgress[]>(
+      `/users/${props.currentLogin.user.id}/progress`
+    ).then((res) => {
+      setStatus(res.data);
+    });
+  };
+
+  const getStatus = (category: number) => {
+    if (status.length === 0 || status.length === undefined) return;
+    return status.filter(
+      (status_item) => status_item.category_id == category
+    )[0];
+  };
 
   const matchTerm = (term: string): boolean => {
     return term.toLowerCase().indexOf(search) > -1;
@@ -31,32 +55,31 @@ const CategoriesPage = (props: Props) => {
   };
 
   const getCategories = async () => {
-    axios
-      .get(`${config.URL}/categories`, {
-        headers: {
-          Authorization: `Bearer ${props.currentLogin.token}`,
-        },
-      })
-      .then((res) => {
-        setCategories(res.data);
-        setLoading(false);
-      });
+    API.get<Category[]>('/categories').then((res) => {
+      setCategories(res.data);
+      setLoading(false);
+    });
   };
 
   const showCategories = () => {
-    return filterCategories().map(({ title, description, slug }: Category) => {
-      return (
+    if (!status) return;
+    return filterCategories().map(
+      ({ title, description, slug, id }: Category) => (
         <div className='card shadow-lg lg:card-side'>
           <div className='card-body'>
             <h2 className='card-title text-left'>{title}</h2>
             <p className='text-left h-12 max-h-12'>{description}</p>
             <Link className='mt-5 btn btn-info w-1/4' to={slug}>
-              Start
+              {getStatus(id) !== undefined
+                ? getStatus(id)?.status !== QuizStatus.UNFINISHED
+                  ? 'View Results'
+                  : 'Continue'
+                : 'Start'}
             </Link>
           </div>
         </div>
-      );
-    });
+      )
+    );
   };
 
   const renderSearchBar = () => {

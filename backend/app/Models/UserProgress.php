@@ -16,7 +16,7 @@ class UserProgress extends Model
 
     public function category()
     {
-        $this->belongsTo(Category::class);
+        $this->hasOne(Category::class);
     }
 
     public function results()

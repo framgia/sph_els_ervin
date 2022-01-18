@@ -12,6 +12,7 @@ import {
 } from '../../../actions/follows';
 import { FollowData } from '../../../actions/types';
 import FollowButton from '../../../components/FollowButton';
+import API from '../../../api/baseAPI';
 
 export interface IAppProps {
   followUser: Function;
@@ -46,16 +47,10 @@ const ProfilePage = (props: IAppProps) => {
 
   const getUser = async () => {
     if (!props.currentLogin) return;
-    await axios
-      .get(`${config.URL}/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${props.currentLogin.token}`,
-        },
-      })
-      .then((res) => {
-        setUser(res.data);
-        setLoading(false);
-      });
+    await API.get(`/users/${userId}`).then((res) => {
+      setUser(res.data);
+      setLoading(false);
+    });
   };
 
   const getFollowingIds = () => {
@@ -70,23 +65,15 @@ const ProfilePage = (props: IAppProps) => {
   };
 
   const setFollowersCount = async () => {
-    await axios
-      .get(`${config.URL}/follows/${userId}/followers`, {
-        headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
-      })
-      .then((res: any) => {
-        setFollowers(res.data.length);
-      });
+    await API.get(`/follows/${userId}/followers`).then((res: any) => {
+      setFollowers(res.data.length);
+    });
   };
 
   const setFollowingCount = async () => {
-    await axios
-      .get(`${config.URL}/follows/${userId}/following`, {
-        headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
-      })
-      .then((res: any) => {
-        setFollowing(res.data.length);
-      });
+    await API.get(`$/follows/${userId}/following`).then((res: any) => {
+      setFollowing(res.data.length);
+    });
   };
 
   const showProfile = () => {

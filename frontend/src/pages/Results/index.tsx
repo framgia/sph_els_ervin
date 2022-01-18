@@ -4,6 +4,7 @@ import { config } from '../../actions/config';
 import { SessionData, UserProgress, Result } from '../../actions/types';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import API from '../../api/baseAPI';
 
 interface Props {
   category: Category;
@@ -32,45 +33,25 @@ const ResultsPage = ({
   }, [score]);
 
   const updateStatus = (progressId: number) => {
-    axios.put(
-      `${config.URL}/users/${user.id}/${category.slug}/progress/${progressId}`,
-      { status: score },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    API.put(`/users/${user.id}/${category.slug}/progress/${progressId}`, {
+      status: score,
+    });
   };
 
   const checkQuizStatus = async () => {
-    return axios
-      .get<UserProgress>(
-        `${config.URL}/users/${user.id}/${category.slug}/progress`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        return res.data;
-      });
+    return API.get<UserProgress>(
+      `/users/${user.id}/${category.slug}/progress`
+    ).then((res) => {
+      return res.data;
+    });
   };
 
   const getUsersQuizData = async () => {
-    await axios
-      .get<Result[]>(
-        `${config.URL}/users/${user.id}/${category.slug}/results`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
+    await API.get<Result[]>(`/users/${user.id}/${category.slug}/results`).then(
+      (res) => {
         setQuizData(res.data);
-      });
+      }
+    );
   };
 
   const getUsersAnswer = (index: number): string | undefined => {

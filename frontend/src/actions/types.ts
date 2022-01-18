@@ -92,6 +92,7 @@ export interface Result {
   user_choice_id: number;
   is_correct: boolean;
 }
+
 // Authentication
 export interface RegistrationData {
   email: string;
