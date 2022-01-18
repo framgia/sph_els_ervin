@@ -13,6 +13,9 @@ import ProfilePage from './pages/Users/ProfilePage';
 import EditProfilePage from './pages/Users/ProfilePage/edit';
 import CategoriesPage from './pages/Categories';
 import Quiz from './pages/Categories/Quiz';
+import CategoriesTablePage from './pages/Admin/Categories';
+import AddWordPage from './pages/Admin/AddWord/create';
+import AddEditCategory from './pages/Admin/Categories/addedit';
 
 interface AppProps {
   SessionData?: {
@@ -31,6 +34,19 @@ function App(props: AppProps) {
     let location = useLocation();
     return !userAuthenticationStatus() ? (
       <Navigate to='/login' replace={true} state={{ from: location }} />
+    ) : (
+      <Outlet />
+    );
+  };
+
+  const userAdminStatus = () => {
+    return props.SessionData && props.SessionData.user.is_admin;
+  };
+
+  const AdminRoute = (): JSX.Element => {
+    let location = useLocation();
+    return !userAdminStatus() ? (
+      <Navigate to='/' replace={true} state={{ from: location }} />
     ) : (
       <Outlet />
     );
@@ -58,6 +74,14 @@ function App(props: AppProps) {
             <Route path=':categorySlug'>
               <Route index element={<Quiz />} />
             </Route>
+          </Route>
+        </Route>
+        <Route path='/admin' element={<AdminRoute />}>
+          <Route path='categories'>
+            <Route index element={<CategoriesTablePage />} />
+            <Route path='new' element={<AddEditCategory />} />
+            <Route path='edit/:categorySlug' element={<AddEditCategory />} />
+            <Route path=':categorySlug' element={<AddWordPage />} />
           </Route>
         </Route>
       </Routes>

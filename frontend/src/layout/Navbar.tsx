@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import '../index.css';
 import { connect } from 'react-redux';
-import { User } from '../actions/types';
+import { User, SessionData } from '../actions/types';
 import { logoutUser } from '../actions/auth';
 import { Link, Navigate } from 'react-router-dom';
 interface Props {

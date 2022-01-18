@@ -47,11 +47,13 @@ class ChoiceController extends Controller
             'choices.*.is_correct' => ['required', 'boolean'],
             'choices.*.choice' => ['required', 'string', 'distinct']
         ])['choices']; // Take choices out of brackets
+
+        $choices = [];
+
         foreach ($data as $index => $choice) {
             $data[$index]["question_id"] = $question->id;
+            $choices[] = Choice::create($data[$index]);
         }
-
-        $choices = Choice::create($data);
 
         return $choices;
     }

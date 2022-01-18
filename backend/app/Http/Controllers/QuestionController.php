@@ -51,7 +51,7 @@ class QuestionController extends Controller
             'category_id' => $category->id,
             'question' => $question_data['question'],
             'slug' => Str::slug($question_data['question']),
-            'image' => $request->file('image')->store('questions')
+            'image' => '/storage/' . $request->file('image')->store($this::STORAGE_PATH, 'images')
         ]);
 
         return $this->showOne($question);

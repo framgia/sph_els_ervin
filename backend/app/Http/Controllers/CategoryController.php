@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -62,7 +63,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $category->fill($request->validate([
-            'title' => ['string', 'unique:categories,title,' . $category->title],
+            'title' => ['string', Rule::unique('categories', 'title')->ignore($category->id)],
             'description' => ['string']
         ]));
 
