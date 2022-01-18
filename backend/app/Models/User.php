@@ -60,13 +60,13 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'follower_id');
     }
 
-    public function user_progess()
+    public function user_progress()
     {
-        return $this->hasMany(UserProgress::class);
+        return $this->hasMany(UserProgress::class, 'user_id');
     }
 
     public function get_user_progress_by_category($id)
     {
-        return $this->user_progess()->where('category_id', $id);
+        return $this->user_progress()->where('category_id', $id);
     }
 }
