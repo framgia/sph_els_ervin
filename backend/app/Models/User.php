@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->user_progress()->where('category_id', $id);
     }
+
+    public function activities()
+    {
+        return $this->hasMany(UserLogs::class, 'user_id');
+    }
 }

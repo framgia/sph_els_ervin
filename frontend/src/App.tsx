@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import { Navbar } from './layout/Navbar';
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { User } from './actions';
@@ -16,6 +15,7 @@ import Quiz from './pages/Categories/Quiz';
 import CategoriesTablePage from './pages/Admin/Categories';
 import AddWordPage from './pages/Admin/AddWord/create';
 import AddEditCategory from './pages/Admin/Categories/addedit';
+import Navbar from './layout/Navbar';
 
 interface AppProps {
   SessionData?: {

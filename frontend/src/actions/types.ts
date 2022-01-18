@@ -93,6 +93,14 @@ export interface Result {
   is_correct: boolean;
 }
 
+export interface Activity {
+  id: number;
+  user_id: number;
+  message: string;
+  created_at: Date;
+  time_diff: string;
+}
+
 // Authentication
 export interface RegistrationData {
   email: string;

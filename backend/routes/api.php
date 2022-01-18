@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ChoiceController;
@@ -41,6 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('users/{user}/progress', [UserProgressController::class, 'fullStatus']);
     Route::apiResource('users/{user}/{category}/progress', UserProgressController::class);
     Route::apiResource('users/{user}/{category}/results', ResultController::class);
+    Route::get('activities', [ActivityController::class, 'index']);
+    Route::get('activities/{user}', [ActivityController::class, 'show']);
+    Route::get('users/{user}/words', [UserController::class, 'words']);
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'abilities:admin']], function () {

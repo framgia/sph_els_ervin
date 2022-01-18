@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SessionData, User } from '../../../actions';
+import { Activity, SessionData, User } from '../../../actions';
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
@@ -28,6 +28,7 @@ const ProfilePage = (props: IAppProps) => {
   const [loading, setLoading] = useState(true);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
+  const [activities, setActivities] = useState<Activity[]>();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const ProfilePage = (props: IAppProps) => {
         dispatch(getFollowList(id, token));
       }
     }
+    getActivites();
   }, []);
 
   const getUser = async () => {
@@ -137,16 +139,58 @@ const ProfilePage = (props: IAppProps) => {
     );
   };
 
+  const getActivites = async () => {
+    if (!props.currentLogin || !userId) return;
+    if (props.currentLogin.user.id != parseInt(userId)) {
+      axios
+        .get<Activity[]>(`${config.URL}/activities/${userId}`, {
+          headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
+        })
+        .then((res) => setActivities(res.data));
+    } else {
+      axios
+        .get<Activity[]>(`${config.URL}/activities`, {
+          headers: { Authorization: `Bearer ${props.currentLogin.token}` },
+        })
+        .then((res) => {
+          setActivities(
+            res.data.filter((activity) =>
+              [...getFollowingIds(), props.currentLogin?.user.id].includes(
+                activity.user_id
+              )
+            )
+          );
+        });
+    }
+  };
+
   const showActivities = () => {
-    return <div className='card shadow'>Activites</div>;
+    if (!activities) return;
+    return activities.map((activity) => (
+      <div
+        className={`card bg-gray-${
+          activity.user_id == props.currentLogin?.user.id ? 600 : 500
+        } mx-4 py-2 text-left px-5`}
+      >
+        {activity.message}
+        <span className='text-xs text-gray-400 text-left mx-4'>
+          {activity.time_diff}
+        </span>
+      </div>
+    ));
   };
 
   return (
     <>
-      <div className='container grid grid-cols-2 mt-3 mx-auto'>
+      <div className='container grid grid-cols-2 mt-3 mx-auto gap-x-6'>
         {loading && <Loading />}
         {user && showProfile()}
-        <div>{showActivities()}</div>
+        <div>
+          <div className='card shadow bg-base-200 flex flex-col py-6 gap-y-4'>
+            <h2 className='text-xl my-2'>Activites</h2>
+            {activities && showActivities()}
+          </div>
+        </div>
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { SessionData, UserProgress, Result } from '../../actions/types';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import API from '../../api/baseAPI';
+import UserProgressAPI from '../../api/UserProgressAPI';
 
 interface Props {
   category: Category;
@@ -19,7 +20,7 @@ const ResultsPage = ({
   questions,
   choices,
 }: Props) => {
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState<number>(-1);
   const [quizData, setQuizData] = useState<Result[]>();
 
   useEffect(() => {
@@ -33,17 +34,18 @@ const ResultsPage = ({
   }, [score]);
 
   const updateStatus = (progressId: number) => {
-    API.put(`/users/${user.id}/${category.slug}/progress/${progressId}`, {
-      status: score,
-    });
+    UserProgressAPI.update(
+      { status: score },
+      user.id,
+      category.slug,
+      progressId
+    );
   };
 
   const checkQuizStatus = async () => {
-    return API.get<UserProgress>(
-      `/users/${user.id}/${category.slug}/progress`
-    ).then((res) => {
-      return res.data;
-    });
+    return UserProgressAPI.getUserCategoryProgress(user.id, category.slug).then(
+      (res) => res.data
+    );
   };
 
   const getUsersQuizData = async () => {

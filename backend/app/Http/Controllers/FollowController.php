@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Follow;
 use App\Models\User;
+use App\Models\UserLogs;
 use Illuminate\Http\Request;
 
 use function PHPUnit\Framework\isEmpty;
@@ -37,6 +38,14 @@ class FollowController extends Controller
             'following_id' => $data['following']
         ]);
 
+        $follower = User::find($data['follower']);
+        $following = User::find($data['following']);
+
+        $follow->user_log()->create([
+            'user_id' => $follower->id,
+            'message' => $follower->name . ' followed ' . $following->name
+        ]);
+
         return response($follow, 201);
     }
 
@@ -68,6 +77,8 @@ class FollowController extends Controller
             ['follower_id', $data['follower']],
             ['following_id', $data['following']]
         ])->first();
+
+        $follow->user_log()->delete();
 
         $follow->delete();
 
