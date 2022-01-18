@@ -43,4 +43,9 @@ class UserController extends Controller
 
         return $this->showOne($user);
     }
+
+    public function words(User $user)
+    {
+        return ($user->user_progress->where('status', '!=', '-1')->pluck('status')->sum());
+    }
 }
