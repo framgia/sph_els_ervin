@@ -14,6 +14,8 @@ import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
 import ResultsPage from '../../Results';
 import API from '../../../api/baseAPI';
+import UserProgressAPI from '../../../api/UserProgressAPI';
+import CategoryAPI from '../../../api/CategoryAPI';
 
 interface Props {
   currentLogin: SessionData;
@@ -44,8 +46,33 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
     await getChoices();
   };
 
-  const checkForQuizData = (questions: Question[]) => {
+  function isUserProgressType(object: any): object is UserProgress {
+    return 'status' in object;
+  }
+
+  const checkForQuizData = async (questions: Question[]) => {
     if (!categorySlug) return;
+    const progress = await UserProgressAPI.getUserCategoryProgress(
+      user.id,
+      categorySlug
+    );
+    if (!progress) {
+      await UserProgressAPI.create(user.id, categorySlug).then((res) =>
+        setUserProgress(res.data)
+      );
+    } else {
+      isUserProgressType(progress) && setUserProgress(progress);
+      if (progress.data.status !== QuizStatus.UNFINISHED) {
+        setPage(questions?.length || 0);
+      } else {
+        let oldData: RecordedQuizData;
+        if (localStorage.getItem(categorySlug)) {
+          oldData = JSON.parse(localStorage.getItem(categorySlug) || '');
+          setPage(oldData.status);
+          setAnswers(oldData.answers);
+        }
+      }
+    }
     API.get<UserProgress>(`/users/${user.id}/${categorySlug}/progress`).then(
       (res) => {
         if (!res.data) {
@@ -53,17 +80,6 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
             `/users/${user.id}/${categorySlug}/progress`
           ).then((res) => setUserProgress(res.data));
         } else {
-          setUserProgress(res.data);
-          if (res.data.status !== QuizStatus.UNFINISHED) {
-            setPage(questions?.length || 0);
-          } else {
-            let oldData: RecordedQuizData;
-            if (localStorage.getItem(categorySlug)) {
-              oldData = JSON.parse(localStorage.getItem(categorySlug) || '');
-              setPage(oldData.status);
-              setAnswers(oldData.answers);
-            }
-          }
         }
         setLoading(false);
       }
@@ -72,7 +88,7 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
 
   const getCategory = async () => {
     if (!categorySlug) return;
-    return await API.get(`/categories/${categorySlug}`).then((res) => {
+    return await CategoryAPI.get(categorySlug).then((res) => {
       setCategory(res.data);
       return res.data;
     });
@@ -127,10 +143,14 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
     );
 
     if (page !== questions?.length) return;
+
     setLoading(true);
-    API.put<UserProgress>(
-      `/users/${user.id}/${categorySlug}/progress/${userProgress.id}`,
-      { status: 1 }
+
+    UserProgressAPI.update(
+      { status: QuizStatus.FINISHED },
+      user.id,
+      categorySlug,
+      userProgress.id
     );
 
     let resultData = {

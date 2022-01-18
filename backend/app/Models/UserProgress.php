@@ -11,16 +11,21 @@ class UserProgress extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function category()
     {
-        $this->hasOne(Category::class);
+        return $this->hasOne(Category::class);
     }
 
     public function results()
     {
-        $this->hasMany(Result::class);
+        return $this->hasMany(Result::class);
+    }
+
+    public function user_log()
+    {
+        return $this->morphOne(UserLogs::class, 'loggable');
     }
 }

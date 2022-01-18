@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class UserProgressController extends Controller
 {
+    const PROGRESS_UNFINISHED = -1;
     /**
      * Display a listing of the resource.
      *
@@ -64,6 +65,12 @@ class UserProgressController extends Controller
         $progress->fill($request->validate([
             'status' => ['integer']
         ]));
+        if ($progress->status !== $this::PROGRESS_UNFINISHED) {
+            $progress->user_log()->create([
+                'user_id' => $user->id,
+                'message' => $user->name . ' learned ' . $progress->status . ' new words from ' . $category->title
+            ]);
+        }
 
         $progress->save();
 

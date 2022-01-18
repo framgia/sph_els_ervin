@@ -1,40 +1,45 @@
-import { Component, Fragment } from 'react';
+import { Component, Fragment, useEffect } from 'react';
 import '../index.css';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { User, SessionData } from '../actions/types';
 import { logoutUser } from '../actions/auth';
 import { Link, Navigate } from 'react-router-dom';
+
 interface Props {
-  SessionData?: {
-    user: User;
-    token: string;
-  };
+  currentLogin: SessionData;
   logoutUser: Function;
   loading: boolean;
 }
 
-class _Navbar extends Component<Props> {
-  logoutSession = (): void => {
-    if (this.props.SessionData) {
-      this.props.logoutUser({
-        user_id: this.props.SessionData.user.id,
-        token: this.props.SessionData.token,
+const Navbar = ({ currentLogin, logoutUser, loading }: Props) => {
+  useEffect(() => {
+    console.log(currentLogin);
+  }, [currentLogin]);
+
+  const logoutSession = (): void => {
+    if (currentLogin) {
+      logoutUser({
+        user_id: currentLogin.user.id,
+        token: currentLogin.token,
       });
       <Navigate to='/' replace={true} />;
     }
   };
 
-  showLoginStatus() {
+  const showLoginStatus = () => {
     return (
       <div className='mr-2'>
-        {this.props.SessionData ? (
+        {currentLogin ? (
           <div>
-            <span className='text-lg font-bold mr-4'>{`Hello, ${this.props.SessionData.user.name}!`}</span>
+            <Link
+              to={`/users/${currentLogin.user.id}`}
+              className='text-lg font-bold mr-4'
+            >{`Hello, ${currentLogin.user.name}!`}</Link>
             <button
               className='btn btn-sm btn-info mr-5'
-              onClick={this.logoutSession}
+              onClick={logoutSession}
             >
-              {this.props.loading ? (
+              {loading ? (
                 <span className='flex items-center justify-center'>
                   <span className='w-4 h-4 border-b-2 border-white-900 rounded-full animate-spin mr-5'></span>
                   Logout
@@ -56,9 +61,9 @@ class _Navbar extends Component<Props> {
         )}
       </div>
     );
-  }
+  };
 
-  renderNavbarCategories() {
+  const renderNavbarCategories = () => {
     return (
       <>
         <Link to='/users' className='btn btn-ghost btn-sm rounded-btn'>
@@ -69,37 +74,35 @@ class _Navbar extends Component<Props> {
         </Link>
       </>
     );
-  }
+  };
 
-  render() {
-    return (
-      <div>
-        <div className='navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box'>
+  return (
+    <div>
+      <div className='navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box'>
+        <div className='flex-1 px-2 mx-2'>
+          <span className='text-lg font-bold'>
+            <Link to='/'>ELS</Link>
+          </span>
           <div className='flex-1 px-2 mx-2'>
-            <span className='text-lg font-bold'>
-              <Link to='/'>ELS</Link>
-            </span>
-            <div className='flex-1 px-2 mx-2'>
-              <div className='items-stretch hidden lg:flex'>
-                <Link to='/' className='btn btn-ghost btn-sm rounded-btn'>
-                  Home
-                </Link>
-                {this.props.SessionData && this.renderNavbarCategories()}
-              </div>
+            <div className='items-stretch hidden lg:flex'>
+              <Link to='/' className='btn btn-ghost btn-sm rounded-btn'>
+                Home
+              </Link>
+              {currentLogin && renderNavbarCategories()}
             </div>
           </div>
-          <div className='flex-none'>{this.showLoginStatus()}</div>
         </div>
+        <div className='flex-none'>{showLoginStatus()}</div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const mapStateToProps = (state: any) => {
   return {
-    SessionData: state.userToken.SessionData,
+    currentLogin: state.userToken.SessionData,
     loading: state.logout.loading,
   };
 };
 
-export const Navbar = connect(mapStateToProps, { logoutUser })(_Navbar);
+export default connect(mapStateToProps, { logoutUser })(Navbar);

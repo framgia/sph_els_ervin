@@ -18,4 +18,9 @@ class Follow extends Model
     {
         return $this->belongsTo(User::class, 'following_id', 'id');
     }
+
+    public function user_log()
+    {
+        return $this->morphOne(UserLogs::class, 'loggable');
+    }
 }
