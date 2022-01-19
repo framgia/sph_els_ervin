@@ -30,10 +30,8 @@ class UserController extends Controller
             'avatar' => ['image'],
         ]));
 
-        if ($request->has('old_password')) {
-            if (Hash::check($request->get('old_password'), $user->password)) {
-                $user->password = Hash::make($request->get('new_password'));
-            }
+        if ($request->has('old_password') && Hash::check($request->get('old_password'), $user->password)) {
+            $user->password = Hash::make($request->get('new_password'));
         }
 
         if ($user->isClean()) {

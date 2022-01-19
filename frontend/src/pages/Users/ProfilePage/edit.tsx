@@ -26,6 +26,7 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, dirtyFields },
   } = useForm<ProfileFormData>({
     defaultValues: {
@@ -34,6 +35,7 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
       avatar: undefined,
     },
   });
+  const watchOldPasswordField = watch('old_password');
   const navigate = useNavigate();
 
   const profileDataValidation = {
@@ -97,7 +99,7 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
 
   return (
     <div className='container mx-auto w-1/2 mt-5'>
-      <div className='p-10 card bg-base-200'>
+      <div className='p-10 card bg-base-200 transition-all ease-in-out'>
         <form onSubmit={handleSubmit(onSubmit)} className='form-control'>
           <label className='label'>Email</label>
           <input
@@ -120,9 +122,15 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
           />
           <FormError message={errors.old_password?.message} />
 
-          <label className='label'>New Password</label>
+          <label
+            className={`label ${
+              !watchOldPasswordField && 'hidden'
+            } transition-all ease-in-out`}
+          >
+            New Password
+          </label>
           <input
-            className='input'
+            className={`input ${!watchOldPasswordField && 'hidden'}`}
             type='password'
             {...register('new_password', profileDataValidation.password)}
           />
@@ -143,7 +151,7 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
               'Edit Profile'
             )}
           </button>
-          {loading ? <Loading /> : ''}
+          {loading && <Loading />}
         </form>
       </div>
     </div>
