@@ -7,6 +7,7 @@ import { config } from '../../../actions/config';
 import FormError from '../../../components/FormError';
 import Loading from '../../../components/Loading';
 import { useNavigate } from 'react-router-dom';
+import API from '../../../api/baseAPI';
 
 interface Props {
   currentLogin?: SessionData;
@@ -16,6 +17,8 @@ interface ProfileFormData {
   avatar: FileList;
   email: string;
   name: string;
+  old_password?: string;
+  new_password?: string;
 }
 
 function EditProfilePage({ currentLogin }: Props): ReactElement {
@@ -49,6 +52,9 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
           ) || 'Invalid File Type',
       },
     },
+    password: {
+      minLength: 8,
+    },
   };
 
   // Provided isDirty function from react hooks form is buggy
@@ -56,11 +62,19 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
     return (
       dirtyFields.avatar !== undefined ||
       dirtyFields.email !== undefined ||
-      dirtyFields.name !== undefined
+      dirtyFields.name !== undefined ||
+      dirtyFields.old_password !== undefined ||
+      dirtyFields.new_password !== undefined
     );
   };
 
-  const onSubmit = ({ avatar, name, email }: ProfileFormData) => {
+  const onSubmit = ({
+    avatar,
+    name,
+    email,
+    old_password,
+    new_password,
+  }: ProfileFormData) => {
     if (!isDirty()) return;
     if (!currentLogin) return;
     const newAvatar = avatar[0];
@@ -70,18 +84,15 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
     if (dirtyFields.avatar) formData.append('avatar', newAvatar);
     formData.append('email', email);
     formData.append('name', name);
+    if (old_password && new_password) {
+      formData.append('old_password', old_password);
+      formData.append('new_password', new_password);
+    }
     setLoading(true);
-    axios
-      .post(`${config.URL}/users/${currentLogin.user.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${currentLogin.token}`,
-        },
-      })
-      .then((res) => {
-        currentLogin.user = res.data;
-        navigate('../');
-      });
+    API.post(`/users/${currentLogin.user.id}`, formData).then((res) => {
+      currentLogin.user = res.data;
+      navigate('../');
+    });
   };
 
   return (
@@ -100,6 +111,22 @@ function EditProfilePage({ currentLogin }: Props): ReactElement {
             {...register('name', profileDataValidation.name)}
           />
           <FormError message={errors.name?.message} />
+
+          <label className='label'>Old Password</label>
+          <input
+            className='input'
+            type='password'
+            {...register('old_password', profileDataValidation.password)}
+          />
+          <FormError message={errors.old_password?.message} />
+
+          <label className='label'>New Password</label>
+          <input
+            className='input'
+            type='password'
+            {...register('new_password', profileDataValidation.password)}
+          />
+          <FormError message={errors.new_password?.message} />
           <label className='label'>Avatar</label>
           <input
             type='file'

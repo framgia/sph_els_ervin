@@ -12,9 +12,7 @@ interface Props {
 }
 
 const Navbar = ({ currentLogin, logoutUser, loading }: Props) => {
-  useEffect(() => {
-    console.log(currentLogin);
-  }, [currentLogin]);
+  useEffect(() => {}, [currentLogin]);
 
   const logoutSession = (): void => {
     if (currentLogin) {
