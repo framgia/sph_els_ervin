@@ -59,15 +59,9 @@ const ProfilePage = (props: IAppProps) => {
 
   const getWordsLearned = () => {
     if (!props.currentLogin) return;
-    axios
-      .get(`${config.URL}/users/${userId}/words`, {
-        headers: {
-          Authorization: `Bearer ${props.currentLogin.token}`,
-        },
-      })
-      .then((res) => {
-        setWordsLearned(res.data);
-      });
+    API.get(`/users/${userId}/words`).then((res) => {
+      setWordsLearned(res.data);
+    });
   };
 
   const getFollowingIds = () => {
