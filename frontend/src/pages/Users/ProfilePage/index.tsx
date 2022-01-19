@@ -29,6 +29,7 @@ const ProfilePage = (props: IAppProps) => {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [activities, setActivities] = useState<Activity[]>();
+  const [wordsLearned, setWordsLearned] = useState(0);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const ProfilePage = (props: IAppProps) => {
       }
     }
     getActivites();
+    getWordsLearned();
   }, []);
 
   const getUser = async () => {
@@ -52,6 +54,13 @@ const ProfilePage = (props: IAppProps) => {
     await API.get(`/users/${userId}`).then((res) => {
       setUser(res.data);
       setLoading(false);
+    });
+  };
+
+  const getWordsLearned = () => {
+    if (!props.currentLogin) return;
+    API.get(`/users/${userId}/words`).then((res) => {
+      setWordsLearned(res.data);
     });
   };
 
@@ -117,7 +126,7 @@ const ProfilePage = (props: IAppProps) => {
                 following={getFollowingIds().includes(user.id)}
               />
             )}
-            <p className='mt-2'>Words Learned: 420</p>
+            <p className='mt-2'>Words Learned: {wordsLearned}</p>
           </div>
         </div>
       </>

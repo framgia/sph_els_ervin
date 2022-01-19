@@ -72,6 +72,34 @@ const Navbar = ({ currentLogin, logoutUser, loading }: Props) => {
         <Link to='/categories' className='btn btn-ghost btn-sm rounded-btn'>
           Categories
         </Link>
+        {currentLogin.user.is_admin && (
+          <div className='dropdown'>
+            <div tabIndex={0} className='m-1 btn'>
+              Admin
+            </div>
+            <ul
+              tabIndex={0}
+              className='p-4 shadow menu dropdown-content bg-base-100 rounded-box w-52'
+            >
+              <li>
+                <Link
+                  to='/admin/categories'
+                  className='btn btn-ghost btn-sm rounded-btn p-2'
+                >
+                  Category List
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to='/admin/users'
+                  className='btn btn-ghost btn-sm rounded-btn p-2'
+                >
+                  Users List
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </>
     );
   };
@@ -85,10 +113,12 @@ const Navbar = ({ currentLogin, logoutUser, loading }: Props) => {
           </span>
           <div className='flex-1 px-2 mx-2'>
             <div className='items-stretch hidden lg:flex'>
-              <Link to='/' className='btn btn-ghost btn-sm rounded-btn'>
-                Home
-              </Link>
-              {currentLogin && renderNavbarCategories()}
+              <div>
+                <Link to='/' className='btn btn-ghost btn-sm rounded-btn'>
+                  Home
+                </Link>
+                {currentLogin && renderNavbarCategories()}
+              </div>
             </div>
           </div>
         </div>
