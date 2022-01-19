@@ -16,6 +16,7 @@ import CategoriesTablePage from './pages/Admin/Categories';
 import AddWordPage from './pages/Admin/AddWord/create';
 import AddEditCategory from './pages/Admin/Categories/addedit';
 import Navbar from './layout/Navbar';
+import AdminUsersList from './pages/Admin/Users';
 
 interface AppProps {
   SessionData?: {
@@ -82,6 +83,9 @@ function App(props: AppProps) {
             <Route path='new' element={<AddEditCategory />} />
             <Route path='edit/:categorySlug' element={<AddEditCategory />} />
             <Route path=':categorySlug' element={<AddWordPage />} />
+          </Route>
+          <Route path='users'>
+            <Route index element={<AdminUsersList />} />
           </Route>
         </Route>
       </Routes>
