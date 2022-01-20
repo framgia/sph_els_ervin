@@ -132,9 +132,7 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
   };
 
   useEffect(() => {
-    if (!categorySlug) return;
-    if (!choices) return;
-    if (!userProgress) return;
+    if (!categorySlug || !choices || !userProgress) return;
     if (loading) return;
     localStorage.setItem(
       categorySlug,
@@ -179,9 +177,8 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
   };
 
   const renderQuestion = () => {
-    if (!questions) return;
+    if (!questions || !choices) return;
     if (page === questions.length) return;
-    if (!choices) return;
     return (
       <>
         <div className='card lg:card-side card-bordered'>
