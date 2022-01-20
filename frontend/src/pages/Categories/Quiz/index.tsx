@@ -8,7 +8,6 @@ import {
   UserProgress,
   QuizStatus,
 } from '../../../actions';
-import axios from 'axios';
 import { config } from '../../../actions/config';
 import { useParams } from 'react-router-dom';
 import Loading from '../../../components/Loading';
@@ -42,7 +41,8 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
 
   const getData = async () => {
     await getCategory();
-    await getQuestions().then((res) => res && checkForQuizData(res));
+    const quest = await getQuestions();
+    quest && checkForQuizData(quest);
     await getChoices();
   };
 
@@ -55,14 +55,15 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
     const progress = await UserProgressAPI.getUserCategoryProgress(
       user.id,
       categorySlug
-    );
+    ).then((res) => res.data);
     if (!progress) {
-      await UserProgressAPI.create(user.id, categorySlug).then((res) =>
-        setUserProgress(res.data)
-      );
+      await UserProgressAPI.create(user.id, categorySlug).then((res) => {
+        console.log(res.data);
+        setUserProgress(res.data);
+      });
     } else {
       isUserProgressType(progress) && setUserProgress(progress);
-      if (progress.data.status !== QuizStatus.UNFINISHED) {
+      if (progress.status !== QuizStatus.UNFINISHED) {
         setPage(questions?.length || 0);
       } else {
         let oldData: RecordedQuizData;
@@ -132,7 +133,8 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
 
   useEffect(() => {
     if (!categorySlug) return;
-    if (!choices || !userProgress) return;
+    if (!choices) return;
+    if (!userProgress) return;
     if (loading) return;
     localStorage.setItem(
       categorySlug,
@@ -211,6 +213,7 @@ const QuizPage = ({ currentLogin: { user, token } }: Props) => {
   const renderResultsScreen = () => {
     if (!category || !questions || !answers || !choices) return;
     if (loading) return;
+    if (page !== questions?.length) return;
     return (
       <ResultsPage
         category={category}

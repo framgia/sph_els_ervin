@@ -1,12 +1,8 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { Category } from '../../../actions';
-import axios from 'axios';
-import { config } from '../../../actions/config';
 import { SessionData } from '../../../actions/types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import API from '../../../api/baseAPI';
 import CategoryAPI from '../../../api/CategoryAPI';
 
 interface Props {

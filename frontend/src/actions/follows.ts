@@ -1,6 +1,5 @@
-import axios from 'axios';
 import { Dispatch } from 'redux';
-import { config } from './config';
+import API from '../api/baseAPI';
 import {
   types,
   FollowUserAction,
@@ -14,16 +13,12 @@ export const followUser = (followData: FollowData, token: string) => {
     dispatch<FollowUserAction>({
       type: types.followUserRequest,
     });
-    await axios
-      .post(`${config.URL}/follows`, followData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        dispatch<FollowUserAction>({
-          type: types.followUserSuccess,
-          payload: res.data,
-        });
+    await API.post('/follows', followData).then((res) => {
+      dispatch<FollowUserAction>({
+        type: types.followUserSuccess,
+        payload: res.data,
       });
+    });
   };
 };
 
@@ -32,17 +27,14 @@ export const unfollowUser = (unfollowData: FollowData, token: string) => {
     dispatch<UnfollowUserAction>({
       type: types.unfollowUserRequest,
     });
-    await axios
-      .delete(`${config.URL}/follows`, {
-        headers: { Authorization: `Bearer ${token}` },
-        data: unfollowData,
-      })
-      .then((res) => {
-        dispatch<UnfollowUserAction>({
-          type: types.unfollowUserSuccess,
-          payload: res.data,
-        });
+    await API.delete('/follows', {
+      data: unfollowData,
+    }).then((res) => {
+      dispatch<UnfollowUserAction>({
+        type: types.unfollowUserSuccess,
+        payload: res.data,
       });
+    });
   };
 };
 
@@ -51,15 +43,11 @@ export const getFollowList = (user: number, token: string) => {
     dispatch<GetFollowListAction>({
       type: types.getFollowListRequest,
     });
-    await axios
-      .get(`${config.URL}/follows/${user}/following`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        dispatch<GetFollowListAction>({
-          type: types.getFollowListSuccess,
-          payload: res.data,
-        });
+    await API.get(`/follows/${user}/following`).then((res) => {
+      dispatch<GetFollowListAction>({
+        type: types.getFollowListSuccess,
+        payload: res.data,
       });
+    });
   };
 };

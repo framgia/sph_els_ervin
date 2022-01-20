@@ -10,6 +10,10 @@ import {
 
 import { config } from './config';
 import { User } from '.';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import API from '../api/baseAPI';
+
 export const registerUser = (registration_data: RegistrationData) => {
   return async (dispatch: Dispatch) => {
     dispatch<RegisterUserAction>({
@@ -25,7 +29,8 @@ export const registerUser = (registration_data: RegistrationData) => {
           type: types.registerUserSuccess,
           payload: res.data,
         });
-        localStorage.setItem('SessionData', JSON.stringify(res.data));
+        Cookies.set('SessionData', JSON.stringify(res.data));
+        Cookies.set('user_token', res.data.token);
       });
   };
 };
@@ -43,7 +48,8 @@ export const loginUser = (login_data: LoginData) => {
           payload: res.data,
         });
 
-        localStorage.setItem('SessionData', JSON.stringify(res.data));
+        Cookies.set('SessionData', JSON.stringify(res.data));
+        Cookies.set('user_token', res.data.token);
       });
   };
 };
@@ -53,20 +59,14 @@ export const logoutUser = ({ user_id, token }: LogoutData) => {
     dispatch<LogoutUserAction>({
       type: types.logoutUserRequest,
     });
-    await axios
-      .post(
-        `${config.URL}/logout`,
-        { user_id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-      .then((res) => {
-        localStorage.removeItem('SessionData');
-        dispatch<LogoutUserAction>({
-          type: types.logoutUserSuccess,
-          payload: res.data,
-        });
+    await API.post('/logout', { user_id }).then((res) => {
+      Cookies.remove('SessionData');
+      Cookies.remove('user_token');
+      dispatch<LogoutUserAction>({
+        type: types.logoutUserSuccess,
+        payload: res.data,
       });
-    alert('Success!');
+    });
   };
 };
 

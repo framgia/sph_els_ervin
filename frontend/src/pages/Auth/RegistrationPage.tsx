@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { RegistrationData } from '../../actions/types';
 import { registerUser } from '../../actions/auth';
 import { connect, useDispatch } from 'react-redux';
 import FormError from '../../components/FormError';
 import Loading from '../../components/Loading';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface Props {
   loading: boolean;
@@ -60,6 +61,14 @@ function RegistrationPage(props: Props) {
   const password = useRef({});
   password.current = watch('password', '');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  let from = location.state?.from?.pathname || '/';
+
+  useEffect(() => {
+    props.loading && navigate(from, { replace: true });
+  }, [props.loading]);
 
   const onSubmit = (data: RegistrationData) => {
     dispatch(registerUser(data));

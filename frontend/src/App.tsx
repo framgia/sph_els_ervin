@@ -17,6 +17,10 @@ import AddWordPage from './pages/Admin/AddWord/create';
 import AddEditCategory from './pages/Admin/Categories/addedit';
 import Navbar from './layout/Navbar';
 import AdminUsersList from './pages/Admin/Users';
+import API from './api/baseAPI';
+import { useEffect } from 'react';
+import CategoryAPI from './api/CategoryAPI';
+import Cookies from 'js-cookie';
 
 interface AppProps {
   SessionData?: {
@@ -26,6 +30,11 @@ interface AppProps {
 }
 
 function App(props: AppProps) {
+  useEffect(() => {
+    Cookies.get('user_token') !== props.SessionData?.token &&
+      window.location.reload();
+  }, [props.SessionData?.token]);
+
   // Auth Navigation
   const userAuthenticationStatus = () => {
     return props.SessionData;

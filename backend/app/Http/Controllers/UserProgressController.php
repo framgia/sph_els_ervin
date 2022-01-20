@@ -65,7 +65,7 @@ class UserProgressController extends Controller
         $progress->fill($request->validate([
             'status' => ['integer']
         ]));
-        if ($progress->status !== $this::PROGRESS_UNFINISHED) {
+        if ($progress->status > 0) {
             $progress->user_log()->create([
                 'user_id' => $user->id,
                 'message' => $user->name . ' learned ' . $progress->status . ' new words from ' . $category->title

@@ -30,7 +30,7 @@ const UserProgressAPI = {
   update: (payload, userid, slug, progressid) => {
     const options = {
       method: 'PUT',
-      url: `/user/${userid}/${slug}/progress/${progressid}`,
+      url: `/users/${userid}/${slug}/progress/${progressid}`,
       data: payload,
     };
 

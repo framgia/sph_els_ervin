@@ -1,10 +1,8 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { useFieldArray, useForm } from 'react-hook-form';
 import FormError from '../../../components/FormError';
-import { Key, useEffect } from 'react';
-import axios from 'axios';
-import { config } from '../../../actions/config';
-import { SessionData, Choice, Question } from '../../../actions/types';
+import { useEffect } from 'react';
+import { SessionData, Question } from '../../../actions/types';
 import { connect } from 'react-redux';
 import API from '../../../api/baseAPI';
 

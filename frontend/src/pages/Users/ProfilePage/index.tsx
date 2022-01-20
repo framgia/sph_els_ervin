@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Activity, SessionData, User } from '../../../actions';
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
@@ -45,9 +44,12 @@ const ProfilePage = (props: IAppProps) => {
         dispatch(getFollowList(id, token));
       }
     }
-    getActivites();
     getWordsLearned();
   }, []);
+
+  useEffect(() => {
+    getActivites();
+  }, [following]);
 
   const getUser = async () => {
     if (!props.currentLogin) return;
@@ -82,7 +84,7 @@ const ProfilePage = (props: IAppProps) => {
   };
 
   const setFollowingCount = async () => {
-    await API.get(`$/follows/${userId}/following`).then((res: any) => {
+    await API.get(`/follows/${userId}/following`).then((res: any) => {
       setFollowing(res.data.length);
     });
   };
@@ -151,25 +153,19 @@ const ProfilePage = (props: IAppProps) => {
   const getActivites = async () => {
     if (!props.currentLogin || !userId) return;
     if (props.currentLogin.user.id != parseInt(userId)) {
-      axios
-        .get<Activity[]>(`${config.URL}/activities/${userId}`, {
-          headers: { Authorization: `Bearer ${props.currentLogin?.token}` },
-        })
-        .then((res) => setActivities(res.data));
+      API.get<Activity[]>(`/activities/${userId}`).then((res) =>
+        setActivities(res.data)
+      );
     } else {
-      axios
-        .get<Activity[]>(`${config.URL}/activities`, {
-          headers: { Authorization: `Bearer ${props.currentLogin.token}` },
-        })
-        .then((res) => {
-          setActivities(
-            res.data.filter((activity) =>
-              [...getFollowingIds(), props.currentLogin?.user.id].includes(
-                activity.user_id
-              )
+      API.get<Activity[]>('/activities').then((res) => {
+        setActivities(
+          res.data.filter((activity) =>
+            [...getFollowingIds(), props.currentLogin?.user.id].includes(
+              activity.user_id
             )
-          );
-        });
+          )
+        );
+      });
     }
   };
 

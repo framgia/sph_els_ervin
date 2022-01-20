@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserLogs;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ActivityController extends Controller
 {
@@ -22,12 +23,15 @@ class ActivityController extends Controller
 
     public function show(User $user)
     {
-        $data = $user->activities->latest()->all();
+        $data = collect($user->activities->sortByDesc('created_at'));
 
-        foreach ($data as $key => $activity) {
-            $data[$key]['time_diff'] = Carbon::parse($data[$key]->created_at)->diffForHumans();
+        $new_collection = [];
+
+        foreach ($data as $col) {
+            $col['time_diff'] = Carbon::parse($col->created_at)->diffForHumans();
+            $new_collection[] = $col;
         }
 
-        return $data;
+        return $new_collection;
     }
 }

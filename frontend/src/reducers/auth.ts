@@ -1,5 +1,6 @@
 import { types } from '../actions/types';
 import { updateUser } from '../actions/auth';
+import Cookies from 'js-cookie';
 import {
   RegisterUserAction,
   LoginUserAction,
@@ -59,11 +60,9 @@ export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
   }
 };
 
-const SessionData: AuthenticationPayloadData = localStorage.getItem(
-  'SessionData'
-)
-  ? { SessionData: JSON.parse(localStorage.getItem('SessionData') || '') }
-  : { SessionData: undefined };
+const SessionData: any = Cookies.get('SessionData')
+  ? { SessionData: JSON.parse(Cookies.get('SessionData') || '') }
+  : { SessionData: '' };
 
 export const userTokenReducer = (
   state: AuthenticationPayloadData = SessionData,
