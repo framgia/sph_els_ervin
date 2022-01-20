@@ -25,13 +25,11 @@ class ActivityController extends Controller
     {
         $data = collect($user->activities->sortByDesc('created_at'));
 
-        $new_collection = [];
+        $data = $data->keys()->map(function ($key) use ($data) {
+            $data[$key]['time_diff'] = Carbon::parse($data[$key]->created_at)->diffForHumans();
+            return $data[$key];
+        });
 
-        foreach ($data as $col) {
-            $col['time_diff'] = Carbon::parse($col->created_at)->diffForHumans();
-            $new_collection[] = $col;
-        }
-
-        return $new_collection;
+        return $data;
     }
 }

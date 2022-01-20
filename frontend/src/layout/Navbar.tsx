@@ -70,7 +70,7 @@ const Navbar = ({ currentLogin, logoutUser, loading }: Props) => {
         <Link to='/categories' className='btn btn-ghost btn-sm rounded-btn'>
           Categories
         </Link>
-        {currentLogin.user.is_admin === 1 && (
+        {!!currentLogin.user.is_admin && (
           <div className='dropdown'>
             <div tabIndex={0} className='m-1 btn'>
               Admin
