@@ -60,10 +60,9 @@ export const logoutUserReducer = (state = {}, action: LogoutUserAction) => {
   }
 };
 
-const SessionData: AuthenticationPayloadData =
-  Cookies.get('SessionData') !== ''
-    ? { SessionData: JSON.parse(Cookies.get('SessionData') || '') }
-    : { SessionData: '' };
+const SessionData: AuthenticationPayloadData = Cookies.get('SessionData')
+  ? { SessionData: JSON.parse(Cookies.get('SessionData')!) }
+  : { SessionData: '' };
 
 export const userTokenReducer = (
   state: AuthenticationPayloadData = SessionData,

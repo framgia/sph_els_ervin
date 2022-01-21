@@ -1,15 +1,14 @@
-let BASE_URL;
-
-switch (process.env.REACT_APP_ENV) {
-  case 'local':
-    BASE_URL = 'http://127.0.0.1:8000';
-    break;
-  case 'ngrok':
-    BASE_URL = 'http://fdac-49-145-101-111.ngrok.io';
-    break;
-  default:
-    BASE_URL = 'https://ervin-els-backend.herokuapp.com';
+interface ENV {
+  [key: string]: string;
 }
+
+const env_url: ENV = {
+  local: process.env.REACT_APP_LOCAL!,
+  ngrok: process.env.REACT_APP_NGROK!,
+  production: process.env.REACT_APP_HEROKU!,
+};
+
+const BASE_URL = env_url[process.env.REACT_APP_ENV!];
 
 export const config = {
   BASE_URL,

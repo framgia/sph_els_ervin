@@ -31,6 +31,7 @@ interface AppProps {
 
 function App(props: AppProps) {
   useEffect(() => {
+    if (!props.SessionData?.token) return;
     Cookies.get('user_token') !== props.SessionData?.token &&
       window.location.reload();
   }, [props.SessionData?.token]);
