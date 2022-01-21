@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { config } from '../actions/config';
+import Cookies from 'js-cookie';
 
-const { token } = JSON.parse(localStorage.getItem('SessionData' || '') || '');
+const token = Cookies.get('user_token');
 
 const API = axios.create({
   baseURL: `${config.URL}`,

@@ -185,5 +185,5 @@ export interface GetFollowListAction {
 
 export const QuizStatus = {
   UNFINISHED: -1,
-  FINISHED: 1,
+  FINISHED: 0,
 };

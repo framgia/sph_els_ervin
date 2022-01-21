@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { User, FollowData, SessionData } from '../../actions/types';
 import Loading from '../../components/Loading';
 import { config } from '../../actions/config';
 import { Link } from 'react-router-dom';
 import { followUser, unfollowUser, getFollowList } from '../../actions/follows';
 import FollowButton from '../../components/FollowButton';
+import API from '../../api/baseAPI';
 
 export interface IAppProps {
   followUser: Function;
@@ -34,7 +34,7 @@ function ListUsersPage(props: IAppProps) {
   }, [dispatch, props.currentLogin]);
 
   const getUsersList = async () => {
-    await axios.get(`${config.URL}/users`).then((res) => {
+    await API.get('/users').then((res) => {
       setLoading(false);
       setUsers(res.data);
     });

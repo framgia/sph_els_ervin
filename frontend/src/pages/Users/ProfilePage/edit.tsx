@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ReactElement, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';

@@ -1,8 +1,6 @@
 import { Category, Choice, Question, QuizStatus } from '../../actions';
 import { useEffect, useState } from 'react';
-import { config } from '../../actions/config';
-import { SessionData, UserProgress, Result } from '../../actions/types';
-import axios from 'axios';
+import { SessionData, Result } from '../../actions/types';
 import { connect } from 'react-redux';
 import API from '../../api/baseAPI';
 import UserProgressAPI from '../../api/UserProgressAPI';
@@ -21,7 +19,7 @@ const ResultsPage = ({
   choices,
 }: Props) => {
   const [score, setScore] = useState<number>(-1);
-  const [quizData, setQuizData] = useState<Result[]>();
+  const [quizData, setQuizData] = useState<Result[]>([]);
 
   useEffect(() => {
     getUsersQuizData();
@@ -77,11 +75,12 @@ const ResultsPage = ({
   }, [quizData]);
 
   const getTotalScore = () => {
-    if (!quizData) return;
+    if (!quizData.length) return;
     setScore(quizData.filter((result) => result.is_correct).length);
   };
 
   const renderResultsData = () => {
+    if (!quizData.length) return;
     return questions.map((question: Question, index) => (
       <tr>
         <td>{getAnswerResult(index) ? 'correct' : 'wrong'}</td>
@@ -106,7 +105,7 @@ const ResultsPage = ({
             <th>Correct Answer</th>
           </tr>
         </thead>
-        <tbody>{renderResultsData()}</tbody>
+        <tbody>{quizData && renderResultsData()}</tbody>
       </table>
     </div>
   );

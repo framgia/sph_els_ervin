@@ -5,6 +5,8 @@ import { loginUser } from '../../actions/auth';
 import FormError from '../../components/FormError';
 import Loading from '../../components/Loading';
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface Props {
   loading: boolean;
@@ -34,12 +36,20 @@ function LoginPage(props: Props) {
     },
   };
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  let from = location.state?.from?.pathname || '/';
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginData>();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    props.loading && navigate(from, { replace: true });
+  }, [props.loading]);
 
   const onSubmit = (data: LoginData) => {
     dispatch(loginUser(data));

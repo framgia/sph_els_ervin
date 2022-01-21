@@ -1,16 +1,9 @@
 import { connect } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Category, SessionData } from '../../actions';
-import axios from 'axios';
-import { config } from '../../actions/config';
 import { Link } from 'react-router-dom';
 import Loading from '../../components/Loading';
-import {
-  UserProgress,
-  Question,
-  Choice,
-  QuizStatus,
-} from '../../actions/types';
+import { UserProgress, QuizStatus } from '../../actions/types';
 import API from '../../api/baseAPI';
 
 interface Props {
